@@ -264,6 +264,17 @@
   @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important;}}
   :focus-visible{outline:2px solid var(--section);outline-offset:2px;}
 
+  .pick-head{font-family:'Bricolage Grotesque';font-weight:700;font-size:18px;letter-spacing:-.01em;margin:4px 2px 12px;}
+  .today-pick{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:8px;}
+  .tpill{padding:11px 15px;border-radius:14px;font-weight:600;font-size:13.5px;background:#fff;border:1.5px solid var(--card-brd);box-shadow:var(--shadow-sm);color:var(--text);display:flex;align-items:center;gap:7px;transition:transform .14s;}
+  .tpill .d{width:9px;height:9px;border-radius:50%;background:var(--sh,var(--section));}
+  .tpill:active{transform:scale(.95);}
+  .tpill.sel{color:#fff;background:linear-gradient(160deg,var(--sh,var(--section)),color-mix(in srgb,var(--sh,var(--section)) 70%,#ffffff));border-color:transparent;box-shadow:0 8px 20px -6px color-mix(in srgb,var(--sh,var(--section)) 55%,transparent);}
+  .tpill.sel .d{background:rgba(255,255,255,.92);}
+  .tpill.rest{--sh:#6C5CE7;}
+  .pick-note{font-size:12.5px;color:var(--muted);margin:4px 2px 10px;min-height:18px;}
+  .wbar.rest .bar{background:linear-gradient(#6C5CE7,#9E8BFF)!important;opacity:.6;}
+  .wbar.rest .wv{font-size:13px;}
 </style>
 </head>
 <body>
@@ -275,6 +286,9 @@
     <div class="eyebrow">Strength · 5-day split</div>
     <div class="wordmark">THE&nbsp;R<span class="o">A</span>CK</div>
     <div class="sub">Browse every exercise. Build your workout. Train.</div>
+    <div class="pick-head">What are you training today?</div>
+    <div class="today-pick" id="todayPick"></div>
+    <div class="pick-note" id="pickNote"></div>
     <button class="progress-card" id="progressCard"></button>
     <div class="today-row"><h2>Sections</h2><span id="todayLabel" class="today-tag"></span></div>
     <div class="days" id="dayList"></div>
@@ -379,13 +393,19 @@ function init(){
 function persistW(){save('rack_workout_v3',workout);}
 function persistP(){save('rack_pres_v3',pres);}
 function persistS(){save('rack_session_v3',{date:todayStr(),data:session});}
-let hist=load('rack_hist_v1')||{};
+let hist=load('rack_hist_v1')||{};let todayPlan=load('rack_todayplan_v1')||{};let rest=load('rack_rest_v1')||{};
+function persistTodayPlan(){save('rack_todayplan_v1',todayPlan);}
+function persistRest(){save('rack_rest_v1',rest);}
+function getTodayKey(){const tp=todayPlan[todayStr()];if(tp==='rest')return null;if(tp&&DAYS.find(d=>d.key===tp))return tp;return WEEKMAP[new Date().getDay()];}
+function renderToday(){const t=todayStr();const tp=todayPlan[t];const isRest=!!rest[t];const wrap=document.getElementById('todayPick');let html=DAYS.map(d=>`<button class="tpill ${tp===d.key?'sel':''}" data-k="${d.key}" style="--sh:${HUES[d.key]}"><span class="d"></span>${d.name}</button>`).join('');html+=`<button class="tpill rest ${isRest?'sel':''}" data-k="rest">\u{1F319} Rest day</button>`;wrap.innerHTML=html;wrap.querySelectorAll('.tpill').forEach(b=>b.onclick=()=>pickToday(b.dataset.k));document.getElementById('pickNote').textContent=isRest?'Rest day logged \u2014 recovery counts, streak safe. \u{1F319}':tp?`Today's pick: ${DAYS.find(d=>d.key===tp)?.name}.`:'Pick a section to train, or log a rest day.';}
+function pickToday(k){const t=todayStr();if(k==='rest'){if(rest[t]){delete rest[t];delete todayPlan[t];}else{rest[t]=1;todayPlan[t]='rest';}persistRest();persistTodayPlan();renderHome();return;}delete rest[t];todayPlan[t]=k;persistRest();persistTodayPlan();openDay(k);}
 function saveHist(){save('rack_hist_v1',hist);}
 function dayTotal(o){return o?Object.values(o).reduce((a,b)=>a+b,0):0;}
 function dateKey(off){const dt=new Date();dt.setDate(dt.getDate()+off);return dt.toISOString().slice(0,10);}
 function syncHistToday(){const t=todayStr();const day={};let any=false;DAYS.forEach(d=>{const c=Object.values(session[d.key]||{}).filter(v=>v==='done').length;if(c){day[d.key]=c;any=true;}});if(any)hist[t]=day;else delete hist[t];saveHist();}
-function streakCount(){let off=dayTotal(hist[dateKey(0)])>0?0:-1;if(off===-1&&!(dayTotal(hist[dateKey(-1)])>0))return 0;let s=0;while(dayTotal(hist[dateKey(off)])>0){s++;off--;}return s;}
-function weekData(){const a=[];const wl=['S','M','T','W','T','F','S'];for(let i=6;i>=0;i--){const k=dateKey(-i);a.push({k,label:wl[new Date(k+'T12:00').getDay()],v:dayTotal(hist[k]),today:i===0});}return a;}
+function dayActive(k){return dayTotal(hist[k])>0||!!rest[k];}
+function streakCount(){let off=dayActive(dateKey(0))?0:-1;if(off===-1&&!dayActive(dateKey(-1)))return 0;let s=0;while(dayActive(dateKey(off))){s++;off--;}return s;}
+function weekData(){const a=[];const wl=['S','M','T','W','T','F','S'];for(let i=6;i>=0;i--){const k=dateKey(-i);a.push({k,label:wl[new Date(k+'T12:00').getDay()],v:dayTotal(hist[k]),rest:!!rest[k],today:i===0});}return a;}
 function totalAll(){return Object.values(hist).reduce((a,o)=>a+dayTotal(o),0);}
 function weekTotal(){return weekData().reduce((a,d)=>a+d.v,0);}
 function bestDay(){let m=0;Object.values(hist).forEach(o=>m=Math.max(m,dayTotal(o)));return m;}
@@ -401,7 +421,7 @@ function closeTracker(){document.getElementById('tracker').style.display='none';
 function renderTracker(){
   const st=streakCount(),wd=weekData(),mx=Math.max(1,...wd.map(d=>d.v));
   const msg=st>=3?'You are on fire. Keep it rolling.':st>0?'Nice. Come back tomorrow to grow it.':'Mark a few exercises done to start your streak.';
-  const chart=wd.map(d=>`<div class="wbar ${d.v?'has':''} ${d.today?'today':''}"><div class="wv">${d.v||''}</div><div class="barwrap"><div class="bar" style="height:${d.v?Math.max(8,Math.round(d.v/mx*100)):4}%"></div></div><div class="wl">${d.label}</div></div>`).join('');
+  const chart=wd.map(d=>d.rest?`<div class="wbar rest ${d.today?'today':''}"><div class="wv">\u{1F319}</div><div class="barwrap"><div class="bar" style="height:32%"></div></div><div class="wl">${d.label}</div></div>`:`<div class="wbar ${d.v?'has':''} ${d.today?'today':''}"><div class="wv">${d.v||''}</div><div class="barwrap"><div class="bar" style="height:${d.v?Math.max(8,Math.round(d.v/mx*100)):4}%"></div></div><div class="wl">${d.label}</div></div>`).join('');
   const mxs=Math.max(1,...DAYS.map(x=>sectionWeek(x.key)));
   const secRows=DAYS.map(d=>{const c=sectionWeek(d.key);return `<div class="sec-row"><span class="dot" style="background:${HUES[d.key]}"></span><span class="nm">${d.name}</span><span class="bar"><i style="width:${Math.round(c/mxs*100)}%;background:${HUES[d.key]}"></i></span><span class="cv">${c}</span></div>`;}).join('');
   document.getElementById('trkBody').innerHTML=`
@@ -425,8 +445,10 @@ function getPres(k,id){return (pres[k]&&pres[k][id])||PLANPRES[k][id]||{sets:3,r
 
 function renderHome(){
   renderProgressCard();
-  const todayKey=WEEKMAP[new Date().getDay()];
-  document.getElementById('todayLabel').textContent='Today · '+(DAYS.find(d=>d.key===todayKey)?.name||'');
+  renderToday();
+  const todayKey=getTodayKey();
+  const _isRest=todayPlan[todayStr()]==='rest';
+  document.getElementById('todayLabel').textContent=_isRest?'Today · Rest 🌙':'Today · '+(DAYS.find(d=>d.key===todayKey)?.name||'');
   const list=document.getElementById('dayList');list.innerHTML='';
   DAYS.forEach((d,i)=>{
     const inW=(workout[d.key]||[]).length;const st=session[d.key]||{};
@@ -590,7 +612,7 @@ function setStatus(kind){
   persistS();const i=currentIndex(),slot=slots[i];
   if(slot&&hydrated.has(i)){slot.classList.toggle('s-done',s[it.id]==='done');slot.classList.toggle('s-doing',s[it.id]==='doing');}
   updateActions();updateDots();syncHistToday();
-  if(kind==='done'&&s[it.id]==='done')checkCelebrate();
+  if(kind==='done'&&s[it.id]==='done'){const _t=todayStr();if(rest[_t]){delete rest[_t];persistRest();}todayPlan[_t]=curDay;persistTodayPlan();checkCelebrate();}
 }
 function openEdit(dayKey,id){
   editCtx={dayKey,id};const p=getPres(dayKey,id),cardio=p.sets==null;
