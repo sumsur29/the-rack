@@ -311,12 +311,72 @@
   .set-field label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);font-weight:600;display:block;margin-bottom:7px;}
   .set-field input{width:100%;background:#F4F4F8;border:1px solid var(--card-brd);border-radius:12px;padding:12px 14px;color:var(--text);font-size:15px;font-family:inherit;outline:none;}
   .set-field input:focus{border-color:var(--section);}
+  .onboard{position:fixed;inset:0;z-index:210;background:linear-gradient(160deg,#FF6A4D,#7C5CFC);display:none;align-items:center;justify-content:center;padding:30px;}
+  .ob-box{background:#fff;border-radius:28px;padding:34px 26px;max-width:360px;width:100%;text-align:center;box-shadow:0 30px 70px -20px rgba(0,0,0,.45);}
+  .ob-logo{font-size:46px;}
+  .ob-box h2{font-family:'Bricolage Grotesque';font-weight:800;font-size:25px;margin:14px 0 8px;}
+  .ob-box p{color:var(--muted);font-size:14px;margin:0 0 22px;line-height:1.5;}
+  .ob-box input{width:100%;background:#F4F4F8;border:1px solid var(--card-brd);border-radius:14px;padding:15px 16px;font-size:17px;font-family:inherit;outline:none;text-align:center;margin-bottom:16px;}
+  .ob-box input:focus{border-color:#FF6A4D;}
+  .ob-box button{width:100%;height:54px;border-radius:16px;background:linear-gradient(160deg,#FF6A4D,#7C5CFC);color:#fff;font-weight:800;font-size:16px;}
+  .back-chip{display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:600;color:var(--muted);background:#fff;border:1px solid var(--card-brd);box-shadow:var(--shadow-sm);padding:9px 15px 9px 11px;border-radius:30px;margin-bottom:16px;}
+  .back-chip svg{width:16px;height:16px;}
+  .back-chip:active{background:#F2F2F7;}
+  .status-wrap{margin-bottom:14px;}
+  .status-banner{width:100%;display:flex;align-items:center;gap:13px;padding:15px 17px;border-radius:18px;text-align:left;background:linear-gradient(135deg,var(--h,#7C5CFC),color-mix(in srgb,var(--h,#7C5CFC) 68%,#fff));color:#fff;box-shadow:0 14px 30px -14px color-mix(in srgb,var(--h,#7C5CFC) 72%,transparent);}
+  .status-banner:active{transform:scale(.99);}
+  .status-banner.rest{background:#fff;color:var(--text);border:1px solid var(--card-brd);box-shadow:var(--shadow-sm);}
+  .status-banner .sb-ic{font-size:21px;}
+  .status-banner b{font-weight:700;font-size:14.5px;display:block;}
+  .status-banner span{font-size:12px;opacity:.92;}
+  .status-banner.rest span{opacity:1;color:var(--muted);}
+  .status-banner .sb-go{margin-left:auto;font-size:24px;opacity:.85;font-weight:300;}
+  .status-banner .sb-undo{margin-left:auto;font-size:12px;font-weight:700;color:var(--section);background:color-mix(in srgb,var(--section) 12%,#fff);padding:7px 12px;border-radius:20px;}
+  .cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+  .cal-head h5{font-family:'Bricolage Grotesque';font-weight:700;font-size:15px;margin:0;}
+  .cal-head button{width:34px;height:34px;border-radius:11px;background:#F2F2F7;display:flex;align-items:center;justify-content:center;color:var(--muted);}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
+  .cal-wl{text-align:center;font-size:10px;font-weight:700;color:var(--faint);padding-bottom:5px;}
+  .cal-cell{aspect-ratio:1;border-radius:11px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;position:relative;background:transparent;}
+  .cal-cell.empty{visibility:hidden;}
+  .cal-cell .cal-num{font-size:12.5px;font-weight:600;color:var(--text);font-family:'JetBrains Mono';}
+  .cal-cell.has{background:#F1F1F7;}
+  .cal-cell .cal-dot{width:6px;height:6px;border-radius:50%;}
+  .cal-cell .cal-dot.moon{width:auto;height:auto;font-size:9px;background:none;}
+  .cal-cell.today{box-shadow:inset 0 0 0 2px var(--section);}
+  .cal-cell.sel{background:linear-gradient(150deg,var(--section),#ff9a3d)!important;}
+  .cal-cell.sel .cal-num{color:#fff;}
+  .cal-cell.sel .cal-dot{background:#fff!important;}
+  .dd-rest{color:var(--muted);font-size:14px;padding:4px 2px;}
+  .dd-empty{color:var(--faint);font-size:13.5px;padding:10px 2px;text-align:center;}
+  .dd-sess{border-radius:16px;background:#F8F8FB;padding:14px;margin-top:10px;}
+  .dd-sess:active{background:#F2F2F7;}
+  .dd-top{display:flex;align-items:center;gap:11px;}
+  .dd-dot{width:10px;height:10px;border-radius:50%;background:var(--h,#FF6A4D);flex-shrink:0;}
+  .dd-info b{font-weight:700;font-size:14px;display:block;text-transform:capitalize;}
+  .dd-info span{font-size:12px;color:var(--muted);}
+  .dd-hr{margin-top:13px;}
+  .hr-mini-msg{font-size:12px;color:var(--faint);padding:4px 0;}
+  .hrm{position:relative;}
+  .hrm-prev{position:absolute;top:-2px;right:0;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--faint);background:#ECECF2;padding:2px 6px;border-radius:10px;}
+  .hrm-row{display:flex;gap:18px;margin-bottom:9px;}
+  .hrm-stat b{font-family:'JetBrains Mono';font-weight:700;font-size:18px;}
+  .hrm-stat span{font-size:9.5px;color:var(--muted);display:block;text-transform:uppercase;letter-spacing:.05em;margin-top:1px;}
+  .hrm-spark{width:100%;height:52px;display:block;margin-bottom:11px;}
+  .hrm-zones{display:flex;flex-direction:column;gap:5px;}
+  .hrm-zrow{display:flex;align-items:center;gap:9px;}
+  .hrm-zd{width:9px;height:9px;border-radius:2px;flex-shrink:0;}
+  .hrm-zn{font-size:11.5px;font-weight:600;width:44px;flex-shrink:0;}
+  .hrm-zbar{flex:1;height:7px;background:#EAEAF1;border-radius:4px;overflow:hidden;}
+  .hrm-zbar i{display:block;height:100%;border-radius:4px;}
+  .hrm-zv{font-family:'JetBrains Mono';font-size:11px;color:var(--muted);width:28px;text-align:right;}
 </style>
 </head>
 <body>
 <div class="bgfx"></div>
 <div id="loader"><div class="bar-load"><span></span><span></span><span></span><span></span></div><p>Loading…</p></div>
 
+<div class="onboard" id="onboard"><div class="ob-box"><div class="ob-logo">🏋️</div><h2>Welcome to The Rack</h2><p>Your training, dialed in. What should we call you?</p><input id="obName" placeholder="Your name" autocomplete="given-name" autocapitalize="words"><button id="obGo">Let’s go</button></div></div>
 <div class="app" id="app" style="display:none;">
   <!-- TODAY -->
   <div class="view on" id="v-today">
@@ -373,7 +433,7 @@
   <div class="dtop"><button class="icon-btn" id="hrBack"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button><div class="dtitle"><div class="t">Heart rate</div><div class="s" id="hrSub"></div></div><button class="icon-btn" id="hrSettings"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 8 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H2a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 3.6 8a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 8 3.6a1.65 1.65 0 0 0 1-1.51V2a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 20.4 8a1.65 1.65 0 0 0 1.51 1H22a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
   <div class="hr-body" id="hrBody"></div>
 </div>
-<div class="modal" id="setModal"><div class="modal-box"><h4>Connect Fitbit</h4><div class="set-field"><label>Pulse endpoint URL</label><input id="setUrl" placeholder="https://prana-flame.vercel.app"></div><div class="set-field"><label>Access key</label><input id="setKey" placeholder="your Pulse access key"></div><div class="set-field"><label>Max heart rate (bpm)</label><input id="setMax" inputmode="numeric" placeholder="185"></div><p style="font-size:11.5px;color:var(--faint);margin:2px 0 16px;line-height:1.5;">The Rack pulls your workout heart rate from your Pulse app afterward. Leave blank to preview with sample data.</p><div class="modal-btns"><button class="cancel" id="setCancel">Cancel</button><button class="save" id="setSave">Save</button></div></div></div>
+<div class="modal" id="setModal"><div class="modal-box"><h4>Settings</h4><div class="set-field"><label>Your name</label><input id="setName" placeholder="Name" autocapitalize="words"></div><div class="set-field"><label>Pulse endpoint URL</label><input id="setUrl" placeholder="https://prana-flame.vercel.app"></div><div class="set-field"><label>Access key</label><input id="setKey" placeholder="your Pulse access key"></div><div class="set-field"><label>Max heart rate (bpm)</label><input id="setMax" inputmode="numeric" placeholder="185"></div><p style="font-size:11.5px;color:var(--faint);margin:2px 0 16px;line-height:1.5;">The Rack pulls your workout heart rate from your Pulse app afterward. Leave blank to preview with sample data.</p><div class="modal-btns"><button class="cancel" id="setCancel">Cancel</button><button class="save" id="setSave">Save</button></div></div></div>
 <div class="toast" id="toast"></div>
 <div class="confetti" id="confetti"></div>
 
@@ -397,6 +457,7 @@ let DB={},POOL={},PLANSET={},PLANPRES={},ALLIDS=[];
 let workout={},pres={},session={},hist={},todayPlan={},rest={};
 let curDay=null,editCtx=null,libSection='push',forcePick=false;
 let sessions=[],hrCfg={url:'',key:'',maxHR:185},curHRkey=null;
+let userName='',todayView='picker',calMonth=null,calSelected=null,_hrgid=0;
 let slots=[],deckList=[],hydrated=new Set(),activeGifIdx=-1;
 
 function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
@@ -424,10 +485,11 @@ function init(){
   const ss=load('rack_session_v3');session=(ss&&ss.date===todayStr())?ss.data:{};
   hist=load('rack_hist_v1')||{};todayPlan=load('rack_todayplan_v1')||{};rest=load('rack_rest_v1')||{};
   sessions=load('rack_sessions_v1')||[];hrCfg=load('rack_hr_cfg')||{url:'',key:'',maxHR:185};
+  userName=load('rack_name')||'';const _n=new Date();calMonth=new Date(Date.UTC(_n.getUTCFullYear(),_n.getUTCMonth(),1));calSelected=todayStr();
   libSection=getTodayKey()||WEEKMAP[new Date().getDay()];
   document.getElementById('loader').style.display='none';
   document.getElementById('app').style.display='block';
-  wire();renderTodayView();
+  wire();renderTodayView();if(!userName)showOnboard();
   if('serviceWorker' in navigator&&location.protocol.startsWith('http')){navigator.serviceWorker.register('./sw.js').catch(()=>{});}
 }
 function persistW(){save('rack_workout_v3',workout);}
@@ -457,14 +519,14 @@ function greeting(){const h=new Date().getHours();return h<12?'Good morning.':h<
 function estMin(key){let sets=0,card=0;(workout[key]||[]).forEach(id=>{const p=getPres(key,id);if(p.sets==null){const m=(''+p.reps).match(/(\d+)/);card+=m?+m[1]:10;}else sets+=p.sets;});return Math.max(5,Math.round(sets*1.5+card));}
 function renderTodayView(){
   document.getElementById('tDate').textContent=new Date().toLocaleDateString(undefined,{weekday:'long',month:'short',day:'numeric'});
-  const t=todayStr(),tp=todayPlan[t],isRest=!!rest[t];
-  const key=getTodayKey();
+  const t=todayStr(),isRest=!!rest[t],key=getTodayKey();
+  const drill=(todayView&&todayView!=='picker'&&DAYS.find(d=>d.key===todayView))?todayView:null;
   const allDone=key&&(workout[key]||[]).length&&(workout[key]||[]).every(id=>(session[key]||{})[id]==='done');
-  document.getElementById('tGreet').textContent=isRest?'Rest day.':allDone?'Crushed it. 💪':greeting();
+  const nm=userName?(', '+userName):'';
+  document.getElementById('tGreet').textContent=drill?DAYS.find(d=>d.key===drill).name:(isRest?'Rest day.':allDone?('Crushed it'+nm+'. 💪'):(greeting()+nm+'.'));
   renderStreakStrip();
   const body=document.getElementById('todayBody');
-  if(isRest&&!forcePick){body.innerHTML=restCardHTML();body.querySelector('#restTrain').onclick=()=>{forcePick=true;renderTodayView();};setSection('#FF6A4D');return;}
-  if(key&&!forcePick){setSection(HUES[key]);body.innerHTML=sessionHTML(key);wireSession(key);return;}
+  if(drill){setSection(HUES[drill]);body.innerHTML=sessionHTML(drill);wireSession(drill);return;}
   setSection('#FF6A4D');body.innerHTML=pickerHTML();wirePicker();
 }
 function renderStreakStrip(){
@@ -473,37 +535,38 @@ function renderStreakStrip(){
   document.getElementById('streakStrip').innerHTML=`<span class="ss-flame">🔥</span><div class="ss-main"><div class="ss-num">${st}</div><div class="ss-lbl">day streak</div></div><div class="ss-spark">${spark}</div>`;
 }
 function pickerHTML(){
-  const tile=d=>{const n=(workout[d.key]||[]).length;const wide=d.key==='upper';return `<button class="pick-tile ${wide?'wide':''}" data-k="${d.key}" style="--h:${HUES[d.key]}"><img class="tile-img" loading="lazy" src="${imgURL(DB[REP[d.key]])}" alt=""><div class="pt-scrim"></div><div class="pt-body"><div class="pn">${d.name}</div><div class="pf">${d.focus}</div></div><div class="pt-foot"><span class="pc">${n} exercise${n===1?'':'s'}</span><span class="pt-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div></button>`;};
+  const t=todayStr();let banner='';
+  if(rest[t]){banner='<button class="status-banner rest" id="restBanner"><span class="sb-ic">🌙</span><div><b>Rest day</b><span>Recovery logged · streak safe</span></div><span class="sb-undo">Undo</span></button>';}
+  else{const key=getTodayKey();if(key){const ids=workout[key]||[],stt=session[key]||{},done=ids.filter(id=>stt[id]==='done').length;if(done>0){const d=DAYS.find(x=>x.key===key);const full=done>=ids.length;banner='<button class="status-banner" id="contBanner" style="--h:'+HUES[key]+'"><span class="sb-ic">'+(full?'✅':'⏱️')+'</span><div><b>'+(full?(d.name+' complete'):('Continue '+d.name))+'</b><span>'+done+'/'+ids.length+' done today</span></div><span class="sb-go">›</span></button>';}}}
+  const tile=d=>{const n=(workout[d.key]||[]).length;const wide=d.key==='upper';return '<button class="pick-tile '+(wide?'wide':'')+'" data-k="'+d.key+'" style="--h:'+HUES[d.key]+'"><img class="tile-img" loading="lazy" src="'+imgURL(DB[REP[d.key]])+'" alt=""><div class="pt-scrim"></div><div class="pt-body"><div class="pn">'+d.name+'</div><div class="pf">'+d.focus+'</div></div><div class="pt-foot"><span class="pc">'+n+' exercise'+(n===1?'':'s')+'</span><span class="pt-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div></button>';};
   const four=DAYS.filter(d=>d.key!=='upper').map(tile).join('');
   const up=tile(DAYS.find(d=>d.key==='upper'));
-  return `<div class="pick-grid">${four}${up}<button class="pick-rest" data-k="rest"><span class="moon">🌙</span><div><b>Rest day</b><span>Log recovery · keep your streak safe</span></div></button></div>`;
+  return (banner?('<div class="status-wrap">'+banner+'</div>'):'')+'<div class="pick-grid">'+four+up+'<button class="pick-rest" data-k="rest"><span class="moon">🌙</span><div><b>Rest day</b><span>Log recovery · keep your streak safe</span></div></button></div>';
 }
 function wirePicker(){
-  document.querySelectorAll('#todayBody .pick-tile, #todayBody .pick-rest').forEach(b=>b.onclick=()=>pickToday(b.dataset.k));
+  const cb=document.getElementById('contBanner');if(cb)cb.onclick=()=>{todayView=getTodayKey();renderTodayView();};
+  const rb=document.getElementById('restBanner');if(rb)rb.onclick=()=>{const t=todayStr();delete rest[t];delete todayPlan[t];persistR();persistTP();renderTodayView();};
+  document.querySelectorAll('#todayBody .pick-tile').forEach(b=>b.onclick=()=>{todayView=b.dataset.k;renderTodayView();});
+  const pr=document.querySelector('#todayBody .pick-rest');if(pr)pr.onclick=()=>pickRest();
 }
-function pickToday(k){
-  const t=todayStr();forcePick=false;
-  if(k==='rest'){rest[t]=1;todayPlan[t]='rest';persistR();persistTP();renderTodayView();toast('Rest day logged 🌙');return;}
-  delete rest[t];todayPlan[t]=k;persistR();persistTP();renderTodayView();
-}
+function pickRest(){const t=todayStr();rest[t]=1;todayPlan[t]='rest';persistR();persistTP();todayView='picker';renderTodayView();toast('Rest day logged 🌙');}
 function sessionHTML(key){
   const d=DAYS.find(x=>x.key===key),ids=workout[key]||[],st=session[key]||{};
   const done=ids.filter(id=>st[id]==='done').length,total=ids.length,pct=total?Math.round(done/total*100):0;
-  const shown=ids.slice(0,6).map(id=>{const ex=DB[id];if(!ex)return'';const p=getPres(key,id);const dn=st[id]==='done';const reps=p.sets==null?p.reps:`${p.sets}×${p.reps}`;return `<button class="mli" data-i="${ids.indexOf(id)}"><div class="mthumb"><img loading="lazy" src="${imgURL(ex)}" onerror="this.style.opacity=0"></div><div class="mname">${ex.n}</div><div class="mreps">${reps}</div><div class="mchk ${dn?'done':''}">${dn?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>':''}</div></button>`;}).join('');
-  const more=total>6?`<div class="mli-more">+${total-6} more — tap Start to see all</div>`:'';
-  return `<div class="sess"><img class="sess-img" src="${imgURL(DB[REP[key]])}" alt=""><button class="sess-change" id="changeBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10l-3 3 3 3"/><path d="M4 13h13a4 4 0 0 0 0-8h-1"/></svg>Change</button>
-    <div class="sess-content"><div class="sess-eyebrow">Today's session</div><div class="sess-name">${d.name}</div><div class="sess-meta">${total} exercise${total===1?'':'s'} · ~${estMin(key)} min</div><div class="sess-focus">${d.focus}</div>
-    <div class="sess-prog"><i style="width:${pct}%"></i></div><div class="sess-prog-txt">${done} of ${total} done</div>
-    <button class="sess-start" id="startBtn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>${done?'Continue':'Start'} workout</button>
-    <div class="sess-sub"><button id="editBtn">＋ Add or edit exercises</button></div></div></div>
-    <div class="mini-list">${shown}${more}</div>
-    <button class="hr-cta" id="hrCta"><span class="hh">\u2764\uFE0F</span><div><b>Heart rate from Fitbit</b><span>Your zones and bpm for this session</span></div><span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span></button>`;
+  const shown=ids.slice(0,6).map(id=>{const ex=DB[id];if(!ex)return'';const p=getPres(key,id);const dn=st[id]==='done';const reps=p.sets==null?p.reps:(p.sets+'×'+p.reps);return '<button class="mli" data-i="'+ids.indexOf(id)+'"><div class="mthumb"><img loading="lazy" src="'+imgURL(ex)+'" onerror="this.style.opacity=0"></div><div class="mname">'+ex.n+'</div><div class="mreps">'+reps+'</div><div class="mchk '+(dn?'done':'')+'">'+(dn?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>':'')+'</div></button>';}).join('');
+  const more=total>6?('<div class="mli-more">+'+(total-6)+' more — tap Start to see all</div>'):'';
+  return '<button class="back-chip" id="backChip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>All workouts</button>'+
+    '<div class="sess"><img class="sess-img" src="'+imgURL(DB[REP[key]])+'" alt="">'+
+    '<div class="sess-content"><div class="sess-eyebrow">Today’s session</div><div class="sess-name">'+d.name+'</div><div class="sess-meta">'+total+' exercise'+(total===1?'':'s')+' · ~'+estMin(key)+' min</div><div class="sess-focus">'+d.focus+'</div>'+
+    '<div class="sess-prog"><i style="width:'+pct+'%"></i></div><div class="sess-prog-txt">'+done+' of '+total+' done</div>'+
+    '<button class="sess-start" id="startBtn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>'+(done?'Continue':'Start')+' workout</button>'+
+    '<div class="sess-sub"><button id="editBtn">＋ Add or edit exercises</button></div></div></div>'+
+    '<div class="mini-list">'+shown+more+'</div>';
 }
 function wireSession(key){
+  document.getElementById('backChip').onclick=()=>{todayView='picker';renderTodayView();};
   document.getElementById('startBtn').onclick=()=>openDeck(key,firstUndone(key));
   document.getElementById('editBtn').onclick=()=>{libSection=key;showTab('library');};
-  document.getElementById('changeBtn').onclick=()=>{forcePick=true;renderTodayView();};
-  const _c=document.getElementById('hrCta');if(_c)_c.onclick=()=>openHR(key);
   document.querySelectorAll('#todayBody .mli').forEach(b=>b.onclick=()=>openDeck(key,+b.dataset.i));
 }
 function firstUndone(key){const ids=workout[key]||[],st=session[key]||{};let i=ids.findIndex(id=>st[id]!=='done');return i<0?0:i;}
@@ -550,16 +613,19 @@ function toggleCat(b){
 /* ---------- PROGRESS ---------- */
 function renderProgress(){
   setSection('#FF6A4D');
-  const st=streakCount(),wd=weekData(),mx=Math.max(1,...wd.map(d=>d.v));
+  const st=streakCount();
   const msg=st>=3?'You are on fire. Keep it rolling.':st>0?'Nice. Come back tomorrow to grow it.':'Train or log a rest day to start your streak.';
-  const chart=wd.map(d=>d.rest?`<div class="wbar rest ${d.today?'today':''}"><div class="wv">🌙</div><div class="barwrap"><div class="bar" style="height:32%"></div></div><div class="wl">${d.label}</div></div>`:`<div class="wbar ${d.v?'has':''} ${d.today?'today':''}"><div class="wv">${d.v||''}</div><div class="barwrap"><div class="bar" style="height:${d.v?Math.max(8,Math.round(d.v/mx*100)):4}%"></div></div><div class="wl">${d.label}</div></div>`).join('');
   const mxs=Math.max(1,...DAYS.map(x=>sectionWeek(x.key)));
   const rows=DAYS.map(d=>{const c=sectionWeek(d.key);return `<div class="sec-row"><span class="dot" style="background:${HUES[d.key]}"></span><span class="nm">${d.name}</span><span class="bar"><i style="width:${Math.round(c/mxs*100)}%;background:${HUES[d.key]}"></i></span><span class="cv">${c}</span></div>`;}).join('');
   document.getElementById('progBody').innerHTML=`
     <div class="streak-hero"><div class="flame">🔥</div><div class="big">${st}</div><div class="lbl">day streak</div><div class="msg">${msg}</div></div>
-    <div class="stat-grid"><div class="stat"><span class="ic">💪</span><div class="v">${totalAll()}</div><div class="k">Total done</div></div><div class="stat"><span class="ic">📅</span><div class="v">${weekTotal()}</div><div class="k">This week</div></div><div class="stat"><span class="ic">🏆</span><div class="v">${bestDay()}</div><div class="k">Best day</div></div><div class="stat"><span class="ic">🎯</span><div class="v">${sectionsThisWeek()}/5</div><div class="k">Sections this week</div></div></div>
-    <div class="trk-card"><h5>This week <small>exercises completed</small></h5><div class="week-chart">${chart}</div></div>
+    <div class="stat-grid"><div class="stat"><span class="ic">💪</span><div class="v">${totalAll()}</div><div class="k">Total done</div></div><div class="stat"><span class="ic">📅</span><div class="v">${weekTotal()}</div><div class="k">This week</div></div><div class="stat"><span class="ic">🏆</span><div class="v">${bestDay()}</div><div class="k">Best day</div></div><div class="stat"><span class="ic">🎯</span><div class="v">${sectionsThisWeek()}/5</div><div class="k">Sections</div></div></div>
+    <div class="trk-card cal-card"><div class="cal-head"><button id="calPrev"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button><h5 id="calTitle"></h5><button id="calNext"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button></div><div class="cal-grid" id="calGrid"></div></div>
+    <div id="dayDetail"></div>
     <div class="trk-card"><h5>By section <small>this week</small></h5>${rows}</div>`;
+  document.getElementById('calPrev').onclick=()=>{calMonth=new Date(Date.UTC(calMonth.getUTCFullYear(),calMonth.getUTCMonth()-1,1));renderCalendar();};
+  document.getElementById('calNext').onclick=()=>{calMonth=new Date(Date.UTC(calMonth.getUTCFullYear(),calMonth.getUTCMonth()+1,1));renderCalendar();};
+  renderCalendar();renderDayDetail();
 }
 
 /* ---------- NAV ---------- */
@@ -577,7 +643,7 @@ function showTab(tab){
 function steps(ex){const t=ex.h||'';return t.split(/(?<=[.!?])\s+/).map(s=>s.trim()).filter(s=>s.length>1);}
 function buildList(){return (workout[curDay]||[]).filter(id=>DB[id]).map(id=>{const p=getPres(curDay,id);return {id,sets:p.sets,reps:p.reps,inPlan:PLANSET[curDay].has(id)};});}
 function openDeck(key,start){
-  curDay=key;setSection(HUES[key]);logStart(key);
+  curDay=key;setSection(HUES[key]);logStart(key);todayView=key;
   document.getElementById('deckTitle').textContent=DAYS.find(d=>d.key===key).name;
   renderDeck();document.getElementById('deck').style.display='flex';
   requestAnimationFrame(()=>{scrollToCard(start||0,false);onScrollSettle();});
@@ -638,19 +704,25 @@ function logStart(key){let s=todaySession(key);if(!s){s={date:todayStr(),key,sta
 function logTouch(key){const s=todaySession(key);if(!s)return;s.end=Date.now();s.done=Object.values(session[key]||{}).filter(v=>v==='done').length;persistSessions();}
 function fmtDur(ms){const m=Math.max(1,Math.round(ms/60000));return m<60?m+' min':Math.floor(m/60)+'h '+(m%60)+'m';}
 function sampleHR(start,end){const n=42;const out=[];let bpm=80;for(let i=0;i<n;i++){const t=start+(end-start)*i/(n-1);bpm+=(Math.random()-0.42)*9;bpm=Math.max(72,Math.min(134,bpm));if(i>n*0.45&&Math.random()<0.22)bpm+=10;bpm=Math.min(140,bpm);out.push({t:new Date(t).toISOString(),bpm:Math.round(bpm)});}return {samples:out,calories:173};}
-function openHR(key){curHRkey=key;const s=todaySession(key);const end=s?s.end:Date.now(),start=s?s.start:end-40*60000;document.getElementById('hrSub').textContent=DAYS.find(d=>d.key===key).name+' \u00b7 '+fmtDur(end-start);document.getElementById('hr').style.display='flex';document.getElementById('hrBody').innerHTML='<div class="hr-empty"><div style="font-size:42px">\u2764\uFE0F</div><p>Pulling your heart rate\u2026</p></div>';fetchHR(start,end);}
+function openHRWindow(label,startISO,endISO){document.getElementById('hrSub').textContent=label;document.getElementById('hr').style.display='flex';document.getElementById('hrBody').innerHTML='<div class="hr-empty"><div style="font-size:42px">❤️</div><p>Pulling your heart rate…</p></div>';fetchHR(startISO,endISO);}
 function closeHR(){document.getElementById('hr').style.display='none';}
 function renderHREmpty(msg){document.getElementById('hrBody').innerHTML=`<div class="hr-empty"><div style="font-size:46px">\u2764\uFE0F</div><p>${msg}</p><button id="hrEmptySet">Open settings</button></div>`;document.getElementById('hrEmptySet').onclick=openSettings;}
+async function getHR(start,end){
+  if(hrCfg.url&&hrCfg.key){try{const u=hrCfg.url.replace(/\/+$/,'')+'/api/hr?start='+new Date(start).toISOString()+'&end='+new Date(end).toISOString()+'&key='+encodeURIComponent(hrCfg.key);const r=await fetch(u);if(!r.ok)throw 0;const d=await r.json();if(!d.samples||!d.samples.length)return {empty:true};return {samples:d.samples,calories:d.calories};}catch(e){return {error:true};}}
+  return Object.assign({},sampleHR(start,end),{preview:true});
+}
 async function fetchHR(start,end){
-  if(hrCfg.url&&hrCfg.key){try{const u=hrCfg.url.replace(/\/+$/,'')+'/api/hr?start='+new Date(start).toISOString()+'&end='+new Date(end).toISOString()+'&key='+encodeURIComponent(hrCfg.key);const r=await fetch(u);if(!r.ok)throw 0;const d=await r.json();if(!d.samples||!d.samples.length){renderHREmpty('No heart-rate data for this window yet \u2014 your Fitbit may still be syncing. Try again in a few minutes.');return;}renderHR(d,start,end,false);return;}catch(e){renderHREmpty('Could not reach your Pulse app. Check the URL and key in settings.');return;}}
-  renderHR(sampleHR(start,end),start,end,true);
+  const d=await getHR(start,end);
+  if(d.error){renderHREmpty('Could not reach your Pulse app. Check the URL and key in settings.');return;}
+  if(d.empty){renderHREmpty('No heart-rate data for this window yet. Your Fitbit may still be syncing — try again in a few minutes.');return;}
+  renderHR(d,start,end,!!d.preview);
 }
 function zoneSummary(Z){const p=Math.round(Z.peak),c=Math.round(Z.cardio),f=Math.round(Z.fat);if(p>0)return `${p} min in peak, ${c} in cardio. Strong session.`;if(c>0)return `${c} min in cardio, ${f} in fat burn. Solid work.`;if(f>0)return `${f} min in the fat-burn zone.`;return 'Mostly light intensity this session.';}
 function renderHR(d,start,end,preview){
   const samples=d.samples.map(s=>({t:new Date(s.t).getTime(),bpm:+s.bpm})).filter(s=>!isNaN(s.bpm));
   if(!samples.length){renderHREmpty('No heart-rate samples returned for this window.');return;}
   const bpms=samples.map(s=>s.bpm),avg=Math.round(bpms.reduce((a,b)=>a+b,0)/bpms.length),mx=Math.max(...bpms),mn=Math.min(...bpms);
-  const maxHR=hrCfg.maxHR||185,dur=end-start,per=dur/samples.length/60000;
+  const maxHR=hrCfg.maxHR||185,ws=Date.parse(start),we=Date.parse(end),dur=we-ws,per=dur/samples.length/60000;
   const Z={below:0,fat:0,cardio:0,peak:0};samples.forEach(s=>{const p=s.bpm/maxHR;if(p>=0.85)Z.peak+=per;else if(p>=0.7)Z.cardio+=per;else if(p>=0.5)Z.fat+=per;else Z.below+=per;});
   const tot=(Z.below+Z.fat+Z.cardio+Z.peak)||1;
   const zoneDefs=[['Peak','#EF4444',Z.peak],['Cardio','#F59E0B',Z.cardio],['Fat burn','#34D399',Z.fat],['Light','#94A3B8',Z.below]];
@@ -666,12 +738,61 @@ function renderHR(d,start,end,preview){
     <div class="hr-card"><h5>Time in zones</h5>${zoneRows}</div>
     ${preview?'<div class="hr-note">Sample data. Connect your Pulse app in settings (\u2699) to pull your real Fitbit heart rate after each workout.</div>':'<div class="hr-note">Pulled from your Fitbit via Pulse \u00b7 zones based on a '+maxHR+' bpm max</div>'}`;
 }
-function openSettings(){document.getElementById('setUrl').value=hrCfg.url||'';document.getElementById('setKey').value=hrCfg.key||'';document.getElementById('setMax').value=hrCfg.maxHR||185;document.getElementById('setModal').classList.add('show');}
+function openSettings(){document.getElementById('setName').value=userName||'';document.getElementById('setUrl').value=hrCfg.url||'';document.getElementById('setKey').value=hrCfg.key||'';document.getElementById('setMax').value=hrCfg.maxHR||185;document.getElementById('setModal').classList.add('show');}
 function closeSettings(){document.getElementById('setModal').classList.remove('show');}
-function saveSettings(){hrCfg.url=document.getElementById('setUrl').value.trim();hrCfg.key=document.getElementById('setKey').value.trim();hrCfg.maxHR=parseInt(document.getElementById('setMax').value)||185;persistHr();closeSettings();toast('Settings saved');}
+function saveSettings(){userName=document.getElementById('setName').value.trim();save('rack_name',userName);hrCfg.url=document.getElementById('setUrl').value.trim();hrCfg.key=document.getElementById('setKey').value.trim();hrCfg.maxHR=parseInt(document.getElementById('setMax').value)||185;persistHr();closeSettings();renderTodayView();toast('Saved');}
+function showOnboard(){const o=document.getElementById('onboard');o.style.display='flex';setTimeout(()=>{const i=document.getElementById('obName');if(i)i.focus();},120);}
+function fmtTime(ms){return new Date(ms).toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'});}
+function primarySection(key){const hh=hist[key];if(!hh)return null;let best=null,bv=-1;for(const k in hh){if(hh[k]>bv){bv=hh[k];best=k;}}return best;}
+function renderCalendar(){
+  const y=calMonth.getUTCFullYear(),m=calMonth.getUTCMonth();
+  document.getElementById('calTitle').textContent=calMonth.toLocaleDateString(undefined,{month:'long',year:'numeric',timeZone:'UTC'});
+  const first=new Date(Date.UTC(y,m,1)).getUTCDay(),days=new Date(Date.UTC(y,m+1,0)).getUTCDate();
+  const wl=['S','M','T','W','T','F','S'];let cells=wl.map(w=>'<div class="cal-wl">'+w+'</div>').join('');
+  for(let i=0;i<first;i++)cells+='<div class="cal-cell empty"></div>';
+  const today=todayStr();
+  for(let dd=1;dd<=days;dd++){
+    const key=y+'-'+String(m+1).padStart(2,'0')+'-'+String(dd).padStart(2,'0');
+    const tot=dayTotal(hist[key]),isRest=!!rest[key];let cls='cal-cell',dot='';
+    if(tot>0){const sec=primarySection(key);cls+=' has';dot='<span class="cal-dot" style="background:'+(HUES[sec]||'#FF6A4D')+'"></span>';}
+    else if(isRest){cls+=' rest';dot='<span class="cal-dot moon">🌙</span>';}
+    if(key===today)cls+=' today';
+    if(key===calSelected)cls+=' sel';
+    cells+='<button class="'+cls+'" data-day="'+key+'"><span class="cal-num">'+dd+'</span>'+dot+'</button>';
+  }
+  document.getElementById('calGrid').innerHTML=cells;
+  document.querySelectorAll('#calGrid .cal-cell[data-day]').forEach(b=>b.onclick=()=>{calSelected=b.dataset.day;renderCalendar();renderDayDetail();});
+}
+function renderDayDetail(){
+  const el=document.getElementById('dayDetail');if(!el)return;const key=calSelected;
+  const dlabel=new Date(key+'T12:00:00Z').toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric',timeZone:'UTC'});
+  const sess=sessions.filter(s=>s.date===key).sort((a,b)=>a.start-b.start);const hh=hist[key];let inner='';
+  if(rest[key]){inner='<div class="dd-rest">🌙 Rest day — recovery logged.</div>';}
+  else if(sess.length){inner=sess.map((s,i)=>{const d=DAYS.find(x=>x.key===s.key);const dur=fmtDur((s.end||s.start)-s.start);const tr=fmtTime(s.start)+' – '+fmtTime(s.end||s.start);return '<div class="dd-sess" data-win="'+new Date(s.start).toISOString()+'|'+new Date(s.end||s.start).toISOString()+'|'+(d?d.name:s.key)+'" style="--h:'+(HUES[s.key]||'#FF6A4D')+'"><div class="dd-top"><span class="dd-dot"></span><div class="dd-info"><b>'+(d?d.name:s.key)+'</b><span>'+tr+' · '+dur+' · '+s.done+' exercise'+(s.done===1?'':'s')+'</span></div></div><div class="dd-hr" id="ddhr'+i+'"></div></div>';}).join('');}
+  else if(hh){const tot=dayTotal(hh);const names=Object.keys(hh).map(k=>{const d=DAYS.find(x=>x.key===k);return d?d.name:k;}).join(', ');inner='<div class="dd-sess"><div class="dd-top"><div class="dd-info"><b>'+tot+' exercise'+(tot===1?'':'s')+' completed</b><span>'+names+'</span></div></div></div>';}
+  else{inner='<div class="dd-empty">No workout logged this day.</div>';}
+  el.innerHTML='<div class="trk-card"><h5>'+dlabel+'</h5>'+inner+'</div>';
+  sess.forEach((s,i)=>{const box=document.getElementById('ddhr'+i);if(box)loadHRInto(box,new Date(s.start).toISOString(),new Date(s.end||s.start).toISOString());});
+  el.querySelectorAll('.dd-sess[data-win]').forEach(c=>{c.onclick=(e)=>{if(e.target.closest('.dd-hr'))return;const parts=c.dataset.win.split('|');openHRWindow(parts[2],parts[0],parts[1]);};});
+}
+function hrCompute(samples,maxHR,ws,we){const b=samples.map(s=>s.bpm);const avg=Math.round(b.reduce((a,x)=>a+x,0)/b.length),mx=Math.max.apply(null,b),mn=Math.min.apply(null,b);const per=(we-ws)/samples.length/60000;const Z={below:0,fat:0,cardio:0,peak:0};samples.forEach(s=>{const p=s.bpm/maxHR;if(p>=.85)Z.peak+=per;else if(p>=.7)Z.cardio+=per;else if(p>=.5)Z.fat+=per;else Z.below+=per;});return {avg,mx,mn,Z,tot:(Z.below+Z.fat+Z.cardio+Z.peak)||1};}
+function hrSpark(samples,maxHR,W,H){const id='hrgm'+(++_hrgid);const b=samples.map(s=>s.bpm);const lo=Math.min(Math.min.apply(null,b),Math.round(maxHR*.45)),hi=Math.max(Math.max.apply(null,b),Math.round(maxHR*.9));const X=i=>4+(W-8)*i/Math.max(1,samples.length-1),Y=v=>H-4-(H-8)*(v-lo)/((hi-lo)||1);const pts=samples.map((s,i)=>X(i).toFixed(1)+','+Y(s.bpm).toFixed(1)).join(' ');return '<svg class="hrm-spark" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none"><defs><linearGradient id="'+id+'" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#3B82F6"/><stop offset=".5" stop-color="#22C55E"/><stop offset=".8" stop-color="#F59E0B"/><stop offset="1" stop-color="#EF4444"/></linearGradient></defs><polyline points="'+pts+'" fill="none" stroke="url(#'+id+')" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg>';}
+function hrZoneMini(Z,tot){const defs=[['Peak','#EF4444',Z.peak],['Cardio','#F59E0B',Z.cardio],['Fat','#34D399',Z.fat],['Light','#94A3B8',Z.below]];return '<div class="hrm-zones">'+defs.map(z=>'<div class="hrm-zrow"><span class="hrm-zd" style="background:'+z[1]+'"></span><span class="hrm-zn">'+z[0]+'</span><span class="hrm-zbar"><i style="width:'+Math.round(z[2]/tot*100)+'%;background:'+z[1]+'"></i></span><span class="hrm-zv">'+Math.round(z[2])+'m</span></div>').join('')+'</div>';}
+function renderHRCompact(d,start,end,preview){
+  const samples=d.samples.map(s=>({t:new Date(s.t).getTime(),bpm:+s.bpm})).filter(s=>!isNaN(s.bpm)).sort((a,b)=>a.t-b.t);
+  if(!samples.length)return '<div class="hr-mini-msg">No heart-rate samples.</div>';
+  const maxHR=hrCfg.maxHR||185,ws=Date.parse(start),we=Date.parse(end);const c=hrCompute(samples,maxHR,ws,we);
+  return '<div class="hrm">'+(preview?'<span class="hrm-prev">sample</span>':'')+'<div class="hrm-row"><div class="hrm-stat"><b>'+c.avg+'</b><span>avg bpm</span></div><div class="hrm-stat"><b>'+c.mx+'</b><span>max</span></div>'+(d.calories?'<div class="hrm-stat"><b>'+d.calories+'</b><span>cal</span></div>':'')+'</div>'+hrSpark(samples,maxHR,300,52)+hrZoneMini(c.Z,c.tot)+'</div>';
+}
+async function loadHRInto(el,start,end){
+  const d=await getHR(start,end);
+  if(d.error){el.innerHTML='<div class="hr-mini-msg">Could not reach Pulse — check settings.</div>';return;}
+  if(d.empty){el.innerHTML='<div class="hr-mini-msg">No heart-rate data for this window yet.</div>';return;}
+  el.innerHTML=renderHRCompact(d,start,end,!!d.preview);
+}
 function wire(){
   let t;document.getElementById('track').addEventListener('scroll',()=>{clearTimeout(t);t=setTimeout(onScrollSettle,90);},{passive:true});
-  document.getElementById('navToday').onclick=()=>showTab('today');
+  document.getElementById('navToday').onclick=()=>{todayView='picker';showTab('today');};
   document.getElementById('navLibrary').onclick=()=>showTab('library');
   document.getElementById('navProgress').onclick=()=>showTab('progress');
   document.getElementById('streakStrip').onclick=()=>showTab('progress');
@@ -695,6 +816,8 @@ function wire(){
   document.getElementById('setCancel').onclick=closeSettings;
   document.getElementById('setSave').onclick=saveSettings;
   document.getElementById('setModal').onclick=e=>{if(e.target.id==='setModal')closeSettings();};
+  const _og=document.getElementById('obGo');if(_og)_og.onclick=()=>{userName=(document.getElementById('obName').value||'').trim();save('rack_name',userName);document.getElementById('onboard').style.display='none';renderTodayView();};
+  const _ob=document.getElementById('obName');if(_ob)_ob.addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('obGo').click();});
   document.addEventListener('keydown',e=>{const deckOpen=document.getElementById('deck').style.display==='flex',modalOpen=document.getElementById('modal').classList.contains('show');if(deckOpen&&!modalOpen){if(e.key==='ArrowRight')scrollToCard(currentIndex()+1);if(e.key==='ArrowLeft')scrollToCard(currentIndex()-1);if(e.key==='Enter')setStatus('done');if(e.key==='Escape')closeDeck();}});
   window.addEventListener('resize',()=>{if(document.getElementById('deck').style.display==='flex'&&deckList.length){const i=currentIndex();scrollToCard(i,false);}});
 }

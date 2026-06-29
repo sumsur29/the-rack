@@ -1,4 +1,4 @@
-const SHELL='rack-shell-v5';
+const SHELL='rack-shell-v6';
 const MEDIA='rack-media-v1';
 const SHELL_FILES=['./','./index.html','./manifest.json','./icon-192.png','./icon-512.png','./icon-180.png'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(SHELL).then(c=>c.addAll(SHELL_FILES)).then(()=>self.skipWaiting()));});
