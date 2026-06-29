@@ -53,33 +53,44 @@
 
   /* picker */
   .pick-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;}
-  .pick-tile{position:relative;border-radius:22px;padding:18px;text-align:left;color:#fff;overflow:hidden;min-height:120px;display:flex;flex-direction:column;justify-content:space-between;background:linear-gradient(155deg,var(--h),color-mix(in srgb,var(--h) 62%,#fff));box-shadow:0 14px 30px -14px color-mix(in srgb,var(--h) 70%,transparent);transition:transform .15s;}
-  .pick-tile:active{transform:scale(.97);}
-  .pick-tile .pn{font-family:'Bricolage Grotesque';font-weight:700;font-size:19px;line-height:1.05;}
-  .pick-tile .pf{font-size:11px;opacity:.9;margin-top:4px;}
-  .pick-tile .pc{font-size:12px;font-weight:600;opacity:.95;}
-  .pick-tile .pdot{position:absolute;right:-14px;top:-20px;width:90px;height:90px;border-radius:50%;background:rgba(255,255,255,.18);}
-  .pick-rest{grid-column:1/-1;border-radius:22px;padding:16px 20px;display:flex;align-items:center;gap:12px;background:#fff;border:1.5px dashed var(--card-brd);color:var(--muted);font-weight:600;font-size:14px;box-shadow:var(--shadow-sm);}
+  .pick-tile{position:relative;isolation:isolate;border-radius:24px;padding:17px;min-height:150px;overflow:hidden;text-align:left;color:#fff;display:flex;flex-direction:column;justify-content:space-between;background:linear-gradient(150deg,var(--h),color-mix(in srgb,var(--h) 55%,#fff));box-shadow:0 18px 36px -16px color-mix(in srgb,var(--h) 78%,transparent);transition:transform .15s;}
+  .pick-tile:active{transform:scale(.975);}
+  .pick-tile.wide{grid-column:1/-1;min-height:126px;}
+  .tile-img{position:absolute;right:-16px;bottom:-12px;width:126px;height:126px;object-fit:contain;mix-blend-mode:multiply;filter:grayscale(1) contrast(1.05);opacity:.92;z-index:0;pointer-events:none;}
+  .pick-tile.wide .tile-img{width:156px;height:156px;right:6px;bottom:-18px;}
+  .pt-scrim{position:absolute;inset:0;z-index:1;background:linear-gradient(125deg,color-mix(in srgb,var(--h) 58%,transparent) 0%,transparent 58%),linear-gradient(to top,color-mix(in srgb,var(--h) 48%,transparent),transparent 55%);}
+  .pt-body{position:relative;z-index:2;}
+  .pn{font-family:'Bricolage Grotesque';font-weight:800;font-size:21px;line-height:1;letter-spacing:-.01em;}
+  .pick-tile.wide .pn{font-size:24px;}
+  .pf{font-size:11.5px;opacity:.92;margin-top:6px;max-width:74%;line-height:1.32;}
+  .pt-foot{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;}
+  .pc{font-size:12px;font-weight:700;background:rgba(255,255,255,.22);padding:5px 11px;border-radius:20px;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);}
+  .pt-go{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.24);display:flex;align-items:center;justify-content:center;}
+  .pt-go svg{width:16px;height:16px;}
+  .pick-rest{grid-column:1/-1;border-radius:20px;padding:15px 20px;display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--card-brd);color:var(--text);box-shadow:var(--shadow-sm);text-align:left;}
   .pick-rest:active{transform:scale(.99);}
-  .pick-rest .moon{font-size:22px;}
+  .pick-rest .moon{font-size:26px;}
+  .pick-rest b{font-weight:700;font-size:14.5px;display:block;}
+  .pick-rest span{font-size:12px;color:var(--muted);}
 
   /* session hero */
-  .sess{border-radius:var(--radius);padding:22px;color:#fff;position:relative;overflow:hidden;background:linear-gradient(150deg,var(--section),color-mix(in srgb,var(--section) 60%,#ff9a3d));box-shadow:0 20px 44px -18px color-mix(in srgb,var(--section) 75%,transparent);margin-bottom:16px;}
-  .sess::after{content:'';position:absolute;right:-30px;top:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.14);}
-  .sess-top{display:flex;align-items:flex-start;gap:14px;position:relative;z-index:1;}
-  .sess-info{flex:1;min-width:0;}
-  .sess-eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;opacity:.85;font-weight:600;}
-  .sess-name{font-family:'Bricolage Grotesque';font-weight:800;font-size:30px;line-height:1;margin:5px 0 6px;letter-spacing:-.01em;}
-  .sess-meta{font-size:12.5px;opacity:.92;}
-  .ring{width:64px;height:64px;flex-shrink:0;}
-  .ring circle{fill:none;stroke-width:4;}
-  .ring .bg{stroke:rgba(255,255,255,.28);}
-  .ring .fg{stroke:#fff;stroke-linecap:round;transition:stroke-dashoffset .5s;transform:rotate(-90deg);transform-origin:50% 50%;}
-  .ring-txt{font-family:'JetBrains Mono';font-weight:700;font-size:13px;fill:#fff;}
-  .sess-start{margin-top:18px;width:100%;height:54px;border-radius:16px;background:#fff;color:var(--section);font-weight:800;font-size:16px;display:flex;align-items:center;justify-content:center;gap:8px;position:relative;z-index:1;box-shadow:0 8px 20px -6px rgba(0,0,0,.2);}
+  .sess{position:relative;isolation:isolate;border-radius:var(--radius);padding:22px;color:#fff;overflow:hidden;background:linear-gradient(150deg,var(--section),color-mix(in srgb,var(--section) 55%,#ff9a3d));box-shadow:0 22px 46px -18px color-mix(in srgb,var(--section) 78%,transparent);margin-bottom:16px;}
+  .sess-img{position:absolute;right:-22px;bottom:-22px;width:178px;height:178px;object-fit:contain;mix-blend-mode:multiply;filter:grayscale(1) contrast(1.05);opacity:.88;z-index:0;pointer-events:none;}
+  .sess-change{position:absolute;top:16px;right:16px;z-index:3;display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.24);border:1px solid rgba(255,255,255,.4);color:#fff;font-weight:700;font-size:12.5px;padding:9px 14px;border-radius:30px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);}
+  .sess-change:active{background:rgba(255,255,255,.36);}
+  .sess-change svg{width:15px;height:15px;}
+  .sess-content{position:relative;z-index:2;}
+  .sess-eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;opacity:.9;font-weight:700;}
+  .sess-name{font-family:'Bricolage Grotesque';font-weight:800;font-size:34px;line-height:1;margin:8px 0 8px;letter-spacing:-.02em;}
+  .sess-meta{font-size:13px;opacity:.95;font-weight:600;}
+  .sess-focus{font-size:12px;opacity:.8;margin-top:3px;}
+  .sess-prog{height:8px;background:rgba(255,255,255,.28);border-radius:5px;overflow:hidden;margin:18px 0 7px;max-width:84%;}
+  .sess-prog i{display:block;height:100%;background:#fff;border-radius:5px;transition:width .45s;box-shadow:0 0 12px rgba(255,255,255,.6);}
+  .sess-prog-txt{font-family:'JetBrains Mono';font-size:11.5px;opacity:.9;}
+  .sess-start{margin-top:16px;width:100%;height:56px;border-radius:16px;background:#fff;color:var(--section);font-weight:800;font-size:16px;display:flex;align-items:center;justify-content:center;gap:9px;box-shadow:0 10px 24px -8px rgba(0,0,0,.28);}
   .sess-start svg{width:20px;height:20px;}
-  .sess-sub{display:flex;gap:10px;margin-top:10px;position:relative;z-index:1;}
-  .sess-sub button{flex:1;height:42px;border-radius:13px;background:rgba(255,255,255,.18);color:#fff;font-weight:600;font-size:13px;border:1px solid rgba(255,255,255,.25);}
+  .sess-sub{margin-top:10px;}
+  .sess-sub button{width:100%;height:46px;border-radius:14px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);color:#fff;font-weight:600;font-size:13.5px;}
   .mini-list{background:var(--card);border-radius:20px;padding:6px;box-shadow:var(--shadow-sm);}
   .mli{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:14px;text-align:left;width:100%;}
   .mli:active{background:#F5F5F9;}
@@ -337,6 +348,7 @@ const DAYS=[
 ];
 const WEEKMAP={1:'push',2:'pull',3:'legs',4:'arms',5:'upper',6:'push',0:'pull'};
 const HUES={push:'#FF6A4D',pull:'#7C5CFC',legs:'#17B890',arms:'#FF5DA2',upper:'#F59E0B'};
+const REP={push:'0662',pull:'0652',legs:'0043',arms:'0334',upper:'0027'};
 
 let DB={},POOL={},PLANSET={},PLANPRES={},ALLIDS=[];
 let workout={},pres={},session={},hist={},todayPlan={},rest={};
@@ -416,8 +428,10 @@ function renderStreakStrip(){
   document.getElementById('streakStrip').innerHTML=`<span class="ss-flame">🔥</span><div class="ss-main"><div class="ss-num">${st}</div><div class="ss-lbl">day streak</div></div><div class="ss-spark">${spark}</div>`;
 }
 function pickerHTML(){
-  const tiles=DAYS.map(d=>{const n=(workout[d.key]||[]).length;return `<button class="pick-tile" data-k="${d.key}" style="--h:${HUES[d.key]}"><span class="pdot"></span><div class="pn">${d.name}</div><div class="pf">${d.focus}</div><div class="pc">${n} exercise${n===1?'':'s'}</div></button>`;}).join('');
-  return `<div class="pick-grid">${tiles}<button class="pick-rest" data-k="rest"><span class="moon">🌙</span>Rest day — log recovery, keep your streak</button></div>`;
+  const tile=d=>{const n=(workout[d.key]||[]).length;const wide=d.key==='upper';return `<button class="pick-tile ${wide?'wide':''}" data-k="${d.key}" style="--h:${HUES[d.key]}"><img class="tile-img" loading="lazy" src="${imgURL(DB[REP[d.key]])}" alt=""><div class="pt-scrim"></div><div class="pt-body"><div class="pn">${d.name}</div><div class="pf">${d.focus}</div></div><div class="pt-foot"><span class="pc">${n} exercise${n===1?'':'s'}</span><span class="pt-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div></button>`;};
+  const four=DAYS.filter(d=>d.key!=='upper').map(tile).join('');
+  const up=tile(DAYS.find(d=>d.key==='upper'));
+  return `<div class="pick-grid">${four}${up}<button class="pick-rest" data-k="rest"><span class="moon">🌙</span><div><b>Rest day</b><span>Log recovery · keep your streak safe</span></div></button></div>`;
 }
 function wirePicker(){
   document.querySelectorAll('#todayBody .pick-tile, #todayBody .pick-rest').forEach(b=>b.onclick=()=>pickToday(b.dataset.k));
@@ -429,14 +443,14 @@ function pickToday(k){
 }
 function sessionHTML(key){
   const d=DAYS.find(x=>x.key===key),ids=workout[key]||[],st=session[key]||{};
-  const done=ids.filter(id=>st[id]==='done').length,total=ids.length;
-  const pct=total?done/total:0,C=2*Math.PI*16,off=C*(1-pct);
-  const ring=`<svg class="ring" viewBox="0 0 36 36"><circle class="bg" cx="18" cy="18" r="16"/><circle class="fg" cx="18" cy="18" r="16" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${off.toFixed(1)}"/><text class="ring-txt" x="18" y="22" text-anchor="middle">${done}/${total}</text></svg>`;
+  const done=ids.filter(id=>st[id]==='done').length,total=ids.length,pct=total?Math.round(done/total*100):0;
   const shown=ids.slice(0,6).map(id=>{const ex=DB[id];if(!ex)return'';const p=getPres(key,id);const dn=st[id]==='done';const reps=p.sets==null?p.reps:`${p.sets}×${p.reps}`;return `<button class="mli" data-i="${ids.indexOf(id)}"><div class="mthumb"><img loading="lazy" src="${imgURL(ex)}" onerror="this.style.opacity=0"></div><div class="mname">${ex.n}</div><div class="mreps">${reps}</div><div class="mchk ${dn?'done':''}">${dn?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>':''}</div></button>`;}).join('');
   const more=total>6?`<div class="mli-more">+${total-6} more — tap Start to see all</div>`:'';
-  return `<div class="sess"><div class="sess-top"><div class="sess-info"><div class="sess-eyebrow">Today's session</div><div class="sess-name">${d.name}</div><div class="sess-meta">${total} exercise${total===1?'':'s'} · ~${estMin(key)} min · ${d.focus}</div></div>${ring}</div>
-    <button class="sess-start" id="startBtn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>${done?'Continue workout':'Start workout'}</button>
-    <div class="sess-sub"><button id="editBtn">＋ Add / edit</button><button id="changeBtn">Change day</button></div></div>
+  return `<div class="sess"><img class="sess-img" src="${imgURL(DB[REP[key]])}" alt=""><button class="sess-change" id="changeBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10l-3 3 3 3"/><path d="M4 13h13a4 4 0 0 0 0-8h-1"/></svg>Change</button>
+    <div class="sess-content"><div class="sess-eyebrow">Today's session</div><div class="sess-name">${d.name}</div><div class="sess-meta">${total} exercise${total===1?'':'s'} · ~${estMin(key)} min</div><div class="sess-focus">${d.focus}</div>
+    <div class="sess-prog"><i style="width:${pct}%"></i></div><div class="sess-prog-txt">${done} of ${total} done</div>
+    <button class="sess-start" id="startBtn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>${done?'Continue':'Start'} workout</button>
+    <div class="sess-sub"><button id="editBtn">＋ Add or edit exercises</button></div></div></div>
     <div class="mini-list">${shown}${more}</div>`;
 }
 function wireSession(key){
