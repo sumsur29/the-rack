@@ -34,7 +34,7 @@
 
   .view{display:none;flex-direction:column;padding:26px 20px 110px;min-height:100dvh;animation:fade .35s ease;}
   .view.on{display:flex;}
-  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
   .vhead{margin-bottom:18px;}
   .vdate{font-size:12px;letter-spacing:.04em;color:var(--muted);font-weight:600;text-transform:uppercase;}
   .vtitle{font-family:'Bricolage Grotesque';font-weight:800;font-size:34px;line-height:1.02;letter-spacing:-.02em;margin-top:6px;}
@@ -89,8 +89,8 @@
   .sess-prog-txt{font-family:'JetBrains Mono';font-size:11.5px;opacity:.9;}
   .sess-start{margin-top:16px;width:100%;height:56px;border-radius:16px;background:#fff;color:var(--section);font-weight:800;font-size:16px;display:flex;align-items:center;justify-content:center;gap:9px;box-shadow:0 10px 24px -8px rgba(0,0,0,.28);}
   .sess-start svg{width:20px;height:20px;}
-  .sess-sub{margin-top:10px;}
-  .sess-sub button{width:100%;height:46px;border-radius:14px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);color:#fff;font-weight:600;font-size:13.5px;}
+  .sess-sub{margin-top:10px;display:flex;gap:8px;}
+  .sess-sub button{flex:1;height:46px;border-radius:14px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);color:#fff;font-weight:600;font-size:13.5px;}
   .mini-list{background:var(--card);border-radius:20px;padding:6px;box-shadow:var(--shadow-sm);}
   .mli{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:14px;text-align:left;width:100%;}
   .mli:active{background:#F5F5F9;}
@@ -370,6 +370,38 @@
   .hrm-zbar{flex:1;height:7px;background:#EAEAF1;border-radius:4px;overflow:hidden;}
   .hrm-zbar i{display:block;height:100%;border-radius:4px;}
   .hrm-zv{font-family:'JetBrains Mono';font-size:11px;color:var(--muted);width:28px;text-align:right;}
+  /* instant taps + liquid glass -- NO backdrop-filter on tap targets (it absorbs the first tap on iOS WebKit) */
+  button,.pick-tile,.mli,.cal-cell,.dd-sess,.status-banner,.re-handle,.chip,[role=button]{touch-action:manipulation;cursor:pointer;-webkit-user-select:none;user-select:none;}
+  button{position:relative;}
+  button:active{opacity:.96;}
+  .sess-start{background:linear-gradient(165deg,rgba(255,255,255,.98),rgba(255,255,255,.85))!important;color:var(--section)!important;border:1px solid rgba(255,255,255,.9);box-shadow:inset 0 1px 0 rgba(255,255,255,.95),inset 0 -12px 22px -14px rgba(0,0,0,.14),0 14px 30px -10px rgba(0,0,0,.34)!important;}
+  .sess-start svg{color:var(--section);}
+  .sess-start:active{transform:scale(.985);}
+  .sess-sub button{background:linear-gradient(165deg,rgba(255,255,255,.30),rgba(255,255,255,.14))!important;border:1px solid rgba(255,255,255,.5);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 6px 16px -10px rgba(0,0,0,.4);}
+  .sess-sub button:active{background:rgba(255,255,255,.4)!important;}
+  .act.doing{background:linear-gradient(165deg,rgba(255,255,255,.97),rgba(255,255,255,.84))!important;border:1px solid var(--glass-brd)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.9),var(--shadow-sm)!important;}
+  .back-chip{background:linear-gradient(165deg,rgba(255,255,255,.82),rgba(255,255,255,.62))!important;border:1px solid rgba(255,255,255,.85);box-shadow:inset 0 1px 0 rgba(255,255,255,.9),var(--shadow-sm);}
+  .back-chip:active{background:rgba(255,255,255,.72)!important;}
+  /* reorder */
+  #reorder{position:fixed;inset:0;background:var(--base);z-index:70;display:none;flex-direction:column;max-width:520px;margin:0 auto;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom);}
+  #reorder .bgfx2{position:absolute;inset:0;z-index:0;background:radial-gradient(50% 36% at 50% 0%,color-mix(in srgb,var(--section) 18%,transparent),transparent 70%);pointer-events:none;}
+  .re-head{display:flex;align-items:center;justify-content:space-between;padding:18px 18px 8px;position:relative;z-index:1;}
+  .re-head h3{font-family:'Bricolage Grotesque';font-weight:800;font-size:21px;margin:0;}
+  .re-done{background:linear-gradient(150deg,var(--section,#FF6A4D),#ff9a3d);color:#fff;font-weight:700;font-size:14px;padding:11px 20px;border-radius:30px;box-shadow:0 10px 22px -8px color-mix(in srgb,var(--section) 55%,transparent);}
+  .re-hint{padding:0 18px 12px;color:var(--muted);font-size:12.5px;position:relative;z-index:1;}
+  .re-list{flex:1;overflow-y:auto;padding:4px 14px 28px;position:relative;z-index:1;scrollbar-width:none;}
+  .re-list::-webkit-scrollbar{display:none;}
+  .re-row{display:flex;align-items:center;gap:11px;background:#fff;border:1px solid var(--card-brd);border-radius:16px;padding:11px 12px;margin-bottom:9px;box-shadow:var(--shadow-sm);}
+  .re-row.dragging{box-shadow:0 20px 44px -10px rgba(0,0,0,.4);transform:scale(1.03);border-color:var(--section);background:rgba(255,255,255,.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);}
+  .re-ph{border:2px dashed var(--card-brd);border-radius:16px;margin-bottom:9px;background:rgba(0,0,0,.025);}
+  .re-handle{flex-shrink:0;width:30px;height:42px;display:flex;align-items:center;justify-content:center;color:var(--faint);touch-action:none;}
+  .re-handle svg{width:20px;height:20px;}
+  .re-thumb{width:46px;height:46px;border-radius:12px;background:#F2F2F7;overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+  .re-thumb img{width:100%;height:100%;object-fit:cover;}
+  .re-info{min-width:0;flex:1;}
+  .re-name{font-weight:600;font-size:14px;text-transform:capitalize;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .re-reps{font-size:12px;color:var(--muted);font-family:'JetBrains Mono';margin-top:2px;}
+  .re-num{flex-shrink:0;font-family:'JetBrains Mono';font-size:12.5px;color:var(--faint);width:22px;text-align:right;}
 </style>
 </head>
 <body>
@@ -399,6 +431,7 @@
     <div id="progBody"></div>
   </div>
 
+<div id="reorder"><div class="bgfx2"></div><div class="re-head"><h3>Reorder</h3><button class="re-done" id="reDone">Done</button></div><div class="re-hint">Drag the handle to reorder your exercises. This sets the order for your session.</div><div class="re-list" id="reBody"></div></div>
   <div class="tabbar">
     <button id="navToday" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5"/><path d="M5 9v11h14V9"/></svg>Today</button>
     <button id="navLibrary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Library</button>
@@ -560,12 +593,13 @@ function sessionHTML(key){
     '<div class="sess-content"><div class="sess-eyebrow">Today’s session</div><div class="sess-name">'+d.name+'</div><div class="sess-meta">'+total+' exercise'+(total===1?'':'s')+' · ~'+estMin(key)+' min</div><div class="sess-focus">'+d.focus+'</div>'+
     '<div class="sess-prog"><i style="width:'+pct+'%"></i></div><div class="sess-prog-txt">'+done+' of '+total+' done</div>'+
     '<button class="sess-start" id="startBtn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>'+(done?'Continue':'Start')+' workout</button>'+
-    '<div class="sess-sub"><button id="editBtn">＋ Add or edit exercises</button></div></div></div>'+
+    '<div class="sess-sub"><button id="reorderBtn">↕ Reorder</button><button id="editBtn">＋ Add / edit</button></div></div></div>'+
     '<div class="mini-list">'+shown+more+'</div>';
 }
 function wireSession(key){
   document.getElementById('backChip').onclick=()=>{todayView='picker';renderTodayView();};
   document.getElementById('startBtn').onclick=()=>openDeck(key,firstUndone(key));
+  document.getElementById('reorderBtn').onclick=()=>openReorder(key);
   document.getElementById('editBtn').onclick=()=>{libSection=key;showTab('library');};
   document.querySelectorAll('#todayBody .mli').forEach(b=>b.onclick=()=>openDeck(key,+b.dataset.i));
 }
@@ -790,6 +824,32 @@ async function loadHRInto(el,start,end){
   if(d.empty){el.innerHTML='<div class="hr-mini-msg">No heart-rate data for this window yet.</div>';return;}
   el.innerHTML=renderHRCompact(d,start,end,!!d.preview);
 }
+let roKey=null;
+function openReorder(key){roKey=key;setSection(HUES[key]);const ids=workout[key]||[];document.getElementById('reBody').innerHTML=ids.map((id,i)=>roRow(id,i)).join('');document.getElementById('reorder').style.display='flex';wireReorderDrag();}
+function roRow(id,i){const ex=DB[id];if(!ex)return '';const p=getPres(roKey,id);const reps=p.sets==null?p.reps:(p.sets+'×'+p.reps);return '<div class="re-row" data-id="'+id+'"><div class="re-handle"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.6"/><circle cx="15" cy="6" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="18" r="1.6"/><circle cx="15" cy="18" r="1.6"/></svg></div><div class="re-thumb"><img loading="lazy" src="'+imgURL(ex)+'" onerror="this.style.opacity=0"></div><div class="re-info"><div class="re-name">'+ex.n+'</div><div class="re-reps">'+reps+'</div></div><div class="re-num">'+(i+1)+'</div></div>';}
+function renumberRO(){document.querySelectorAll('#reBody .re-row').forEach((r,i)=>{const n=r.querySelector('.re-num');if(n)n.textContent=i+1;});}
+function closeReorder(doSave){if(doSave){const order=[...document.querySelectorAll('#reBody .re-row')].map(r=>r.dataset.id);if(order.length){workout[roKey]=order;persistW();toast('Order saved');}}document.getElementById('reorder').style.display='none';todayView=roKey;renderTodayView();}
+function wireReorderDrag(){
+  const list=document.getElementById('reBody');let drag=null,ph=null,offY=0;
+  list.querySelectorAll('.re-handle').forEach(hd=>{
+    hd.addEventListener('pointerdown',e=>{
+      e.preventDefault();drag=hd.closest('.re-row');const r=drag.getBoundingClientRect();offY=e.clientY-r.top;
+      ph=document.createElement('div');ph.className='re-ph';ph.style.height=r.height+'px';
+      drag.parentNode.insertBefore(ph,drag.nextSibling);
+      drag.style.width=r.width+'px';drag.style.position='fixed';drag.style.left=r.left+'px';drag.style.top=(e.clientY-offY)+'px';drag.style.zIndex='30';
+      drag.classList.add('dragging');hd.setPointerCapture(e.pointerId);
+    });
+    hd.addEventListener('pointermove',e=>{
+      if(!drag)return;drag.style.top=(e.clientY-offY)+'px';
+      const vh=window.innerHeight;if(e.clientY<150)list.scrollTop-=9;else if(e.clientY>vh-150)list.scrollTop+=9;
+      const rows=[...list.querySelectorAll('.re-row:not(.dragging)')];let after=null;
+      for(const row of rows){const rr=row.getBoundingClientRect();if(e.clientY<rr.top+rr.height/2){after=row;break;}}
+      if(after)list.insertBefore(ph,after);else list.appendChild(ph);
+    });
+    const end=()=>{if(!drag)return;list.insertBefore(drag,ph);ph.remove();ph=null;drag.classList.remove('dragging');drag.style.position='';drag.style.left='';drag.style.top='';drag.style.width='';drag.style.zIndex='';drag=null;renumberRO();};
+    hd.addEventListener('pointerup',end);hd.addEventListener('pointercancel',end);
+  });
+}
 function wire(){
   let t;document.getElementById('track').addEventListener('scroll',()=>{clearTimeout(t);t=setTimeout(onScrollSettle,90);},{passive:true});
   document.getElementById('navToday').onclick=()=>{todayView='picker';showTab('today');};
@@ -815,6 +875,7 @@ function wire(){
   document.getElementById('hrSettings').onclick=openSettings;
   document.getElementById('setCancel').onclick=closeSettings;
   document.getElementById('setSave').onclick=saveSettings;
+  const _rd=document.getElementById('reDone');if(_rd)_rd.onclick=()=>closeReorder(true);
   document.getElementById('setModal').onclick=e=>{if(e.target.id==='setModal')closeSettings();};
   const _og=document.getElementById('obGo');if(_og)_og.onclick=()=>{userName=(document.getElementById('obName').value||'').trim();save('rack_name',userName);document.getElementById('onboard').style.display='none';renderTodayView();};
   const _ob=document.getElementById('obName');if(_ob)_ob.addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('obGo').click();});
