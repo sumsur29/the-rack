@@ -273,6 +273,44 @@
   .toast.show{opacity:1;transform:translateX(-50%) translateY(-6px);}
   @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important;}}
   :focus-visible{outline:2px solid var(--section);outline-offset:2px;}
+  .vhead-row{display:flex;align-items:flex-start;justify-content:space-between;}
+  .gear{width:42px;height:42px;border-radius:14px;background:#fff;border:1px solid var(--card-brd);box-shadow:var(--shadow-sm);display:flex;align-items:center;justify-content:center;color:var(--muted);flex-shrink:0;margin-top:4px;}
+  .gear svg{width:20px;height:20px;}
+  .hr-cta{width:100%;margin-top:14px;border-radius:18px;padding:16px 18px;display:flex;align-items:center;gap:13px;text-align:left;background:linear-gradient(135deg,#FF4D6D,#FF7A9C);color:#fff;box-shadow:0 14px 30px -14px rgba(255,77,109,.6);transition:transform .14s;}
+  .hr-cta:active{transform:scale(.985);}
+  .hr-cta .hh{font-size:24px;}
+  .hr-cta b{font-weight:700;font-size:14.5px;display:block;}
+  .hr-cta span{font-size:12px;opacity:.92;}
+  .hr-cta .go{margin-left:auto;}
+  .hr-cta .go svg{width:20px;height:20px;}
+  #hr .hr-body{flex:1;overflow-y:auto;padding:2px 16px 30px;position:relative;z-index:1;}
+  .hr-hero{border-radius:24px;padding:22px;color:#fff;background:linear-gradient(140deg,#FF4D6D,#FF8585);box-shadow:0 20px 44px -18px rgba(255,77,109,.6);margin-bottom:16px;position:relative;overflow:hidden;}
+  .preview-badge{display:inline-block;background:rgba(255,255,255,.25);font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 9px;border-radius:20px;margin-bottom:12px;}
+  .hr-hero .hb{display:flex;align-items:baseline;gap:9px;}
+  .hr-hero .hbpm{font-family:'Bricolage Grotesque';font-weight:800;font-size:64px;line-height:.95;}
+  .hr-hero .hunit{font-size:15px;font-weight:600;opacity:.9;}
+  .hr-hero .hsum{font-size:13px;opacity:.92;margin-top:8px;}
+  .hr-chips{display:flex;gap:10px;margin-top:16px;}
+  .hr-chips .hc{background:rgba(255,255,255,.2);border-radius:14px;padding:10px 13px;flex:1;}
+  .hr-chips .hc .v{font-family:'JetBrains Mono';font-weight:700;font-size:17px;}
+  .hr-chips .hc .k{font-size:10px;opacity:.9;text-transform:uppercase;letter-spacing:.06em;margin-top:2px;}
+  .hr-card{border-radius:22px;padding:18px 20px;background:#fff;border:1px solid var(--card-brd);box-shadow:var(--shadow-sm);margin-bottom:16px;}
+  .hr-card h5{font-family:'Bricolage Grotesque';font-weight:700;font-size:15px;margin:0 0 14px;}
+  .hr-chart{width:100%;height:160px;display:block;}
+  .zone-row{display:flex;align-items:center;gap:12px;padding:9px 0;}
+  .zone-row .zd{width:11px;height:11px;border-radius:3px;flex-shrink:0;}
+  .zone-row .zn{font-size:13px;font-weight:600;width:78px;flex-shrink:0;}
+  .zone-row .zbar{flex:1;height:9px;background:#EEEEF4;border-radius:5px;overflow:hidden;}
+  .zone-row .zbar i{display:block;height:100%;border-radius:5px;transition:width .5s;}
+  .zone-row .zv{font-family:'JetBrains Mono';font-size:12px;color:var(--muted);width:52px;text-align:right;}
+  .hr-note{font-size:12px;color:var(--faint);text-align:center;padding:4px 10px 0;line-height:1.5;}
+  .hr-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 30px;gap:14px;min-height:60vh;}
+  .hr-empty p{color:var(--muted);font-size:14px;line-height:1.5;max-width:270px;}
+  .hr-empty button{background:linear-gradient(135deg,#FF4D6D,#FF7A9C);color:#fff;font-weight:700;padding:13px 24px;border-radius:14px;}
+  .set-field{margin-bottom:14px;}
+  .set-field label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);font-weight:600;display:block;margin-bottom:7px;}
+  .set-field input{width:100%;background:#F4F4F8;border:1px solid var(--card-brd);border-radius:12px;padding:12px 14px;color:var(--text);font-size:15px;font-family:inherit;outline:none;}
+  .set-field input:focus{border-color:var(--section);}
 </style>
 </head>
 <body>
@@ -282,7 +320,7 @@
 <div class="app" id="app" style="display:none;">
   <!-- TODAY -->
   <div class="view on" id="v-today">
-    <div class="vhead"><div class="vdate" id="tDate"></div><div class="vtitle" id="tGreet"></div></div>
+    <div class="vhead vhead-row"><div><div class="vdate" id="tDate"></div><div class="vtitle" id="tGreet"></div></div><button class="gear" id="gearBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 8 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H2a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 3.6 8a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 8 3.6a1.65 1.65 0 0 0 1-1.51V2a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 20.4 8a1.65 1.65 0 0 0 1.51 1H22a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
     <button class="streak-strip" id="streakStrip"></button>
     <div id="todayBody"></div>
   </div>
@@ -331,6 +369,11 @@
 </div>
 
 <div class="modal" id="modal"><div class="modal-box"><h4 id="modalName">Edit</h4><div class="field" id="setsField"><label>Sets</label><div class="stepper"><button id="setsMinus">−</button><span class="val mono" id="setsVal">3</span><button id="setsPlus">+</button></div></div><div class="field"><label id="repsLabel">Reps</label><input id="repsInput" inputmode="text" placeholder="e.g. 8–10"></div><div class="modal-btns"><button class="cancel" id="modalCancel">Cancel</button><button class="save" id="modalSave">Save</button></div></div></div>
+<div class="deck" id="hr" style="display:none;">
+  <div class="dtop"><button class="icon-btn" id="hrBack"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button><div class="dtitle"><div class="t">Heart rate</div><div class="s" id="hrSub"></div></div><button class="icon-btn" id="hrSettings"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 8 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H2a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 3.6 8a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 8 3.6a1.65 1.65 0 0 0 1-1.51V2a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 20.4 8a1.65 1.65 0 0 0 1.51 1H22a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
+  <div class="hr-body" id="hrBody"></div>
+</div>
+<div class="modal" id="setModal"><div class="modal-box"><h4>Connect Fitbit</h4><div class="set-field"><label>Pulse endpoint URL</label><input id="setUrl" placeholder="https://prana-flame.vercel.app"></div><div class="set-field"><label>Access key</label><input id="setKey" placeholder="your Pulse access key"></div><div class="set-field"><label>Max heart rate (bpm)</label><input id="setMax" inputmode="numeric" placeholder="185"></div><p style="font-size:11.5px;color:var(--faint);margin:2px 0 16px;line-height:1.5;">The Rack pulls your workout heart rate from your Pulse app afterward. Leave blank to preview with sample data.</p><div class="modal-btns"><button class="cancel" id="setCancel">Cancel</button><button class="save" id="setSave">Save</button></div></div></div>
 <div class="toast" id="toast"></div>
 <div class="confetti" id="confetti"></div>
 
@@ -353,6 +396,7 @@ const REP={push:'0662',pull:'0652',legs:'0043',arms:'0334',upper:'0027'};
 let DB={},POOL={},PLANSET={},PLANPRES={},ALLIDS=[];
 let workout={},pres={},session={},hist={},todayPlan={},rest={};
 let curDay=null,editCtx=null,libSection='push',forcePick=false;
+let sessions=[],hrCfg={url:'',key:'',maxHR:185},curHRkey=null;
 let slots=[],deckList=[],hydrated=new Set(),activeGifIdx=-1;
 
 function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
@@ -379,6 +423,7 @@ function init(){
   pres=load('rack_pres_v3')||{};
   const ss=load('rack_session_v3');session=(ss&&ss.date===todayStr())?ss.data:{};
   hist=load('rack_hist_v1')||{};todayPlan=load('rack_todayplan_v1')||{};rest=load('rack_rest_v1')||{};
+  sessions=load('rack_sessions_v1')||[];hrCfg=load('rack_hr_cfg')||{url:'',key:'',maxHR:185};
   libSection=getTodayKey()||WEEKMAP[new Date().getDay()];
   document.getElementById('loader').style.display='none';
   document.getElementById('app').style.display='block';
@@ -451,12 +496,14 @@ function sessionHTML(key){
     <div class="sess-prog"><i style="width:${pct}%"></i></div><div class="sess-prog-txt">${done} of ${total} done</div>
     <button class="sess-start" id="startBtn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>${done?'Continue':'Start'} workout</button>
     <div class="sess-sub"><button id="editBtn">＋ Add or edit exercises</button></div></div></div>
-    <div class="mini-list">${shown}${more}</div>`;
+    <div class="mini-list">${shown}${more}</div>
+    <button class="hr-cta" id="hrCta"><span class="hh">\u2764\uFE0F</span><div><b>Heart rate from Fitbit</b><span>Your zones and bpm for this session</span></div><span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span></button>`;
 }
 function wireSession(key){
   document.getElementById('startBtn').onclick=()=>openDeck(key,firstUndone(key));
   document.getElementById('editBtn').onclick=()=>{libSection=key;showTab('library');};
   document.getElementById('changeBtn').onclick=()=>{forcePick=true;renderTodayView();};
+  const _c=document.getElementById('hrCta');if(_c)_c.onclick=()=>openHR(key);
   document.querySelectorAll('#todayBody .mli').forEach(b=>b.onclick=()=>openDeck(key,+b.dataset.i));
 }
 function firstUndone(key){const ids=workout[key]||[],st=session[key]||{};let i=ids.findIndex(id=>st[id]!=='done');return i<0?0:i;}
@@ -530,13 +577,13 @@ function showTab(tab){
 function steps(ex){const t=ex.h||'';return t.split(/(?<=[.!?])\s+/).map(s=>s.trim()).filter(s=>s.length>1);}
 function buildList(){return (workout[curDay]||[]).filter(id=>DB[id]).map(id=>{const p=getPres(curDay,id);return {id,sets:p.sets,reps:p.reps,inPlan:PLANSET[curDay].has(id)};});}
 function openDeck(key,start){
-  curDay=key;setSection(HUES[key]);
+  curDay=key;setSection(HUES[key]);logStart(key);
   document.getElementById('deckTitle').textContent=DAYS.find(d=>d.key===key).name;
   renderDeck();document.getElementById('deck').style.display='flex';
   requestAnimationFrame(()=>{scrollToCard(start||0,false);onScrollSettle();});
   if(!load('rack_hint_seen')&&deckList.length>1){const h=document.getElementById('hint');h.style.display='flex';setTimeout(()=>h.style.display='none',3600);save('rack_hint_seen',1);}
 }
-function closeDeck(){document.getElementById('deck').style.display='none';renderTodayView();}
+function closeDeck(){logTouch(curDay);document.getElementById('deck').style.display='none';renderTodayView();}
 function cardHTML(it,i,total){
   const ex=DB[it.id],cardio=it.sets==null;
   const pb=cardio?`<div><div class="big">${it.reps}</div><div class="lbl">Cardio</div></div>`:`<div><div class="big">${it.sets} × ${it.reps}</div><div class="lbl">Sets × reps</div></div>`;
@@ -574,7 +621,7 @@ function setStatus(kind){
   const s=session[curDay],cur=s[it.id];
   if(kind==='doing'){Object.keys(s).forEach(k=>{if(s[k]==='doing')delete s[k];});if(cur!=='doing')s[it.id]='doing';}else{if(cur==='done')delete s[it.id];else s[it.id]='done';}
   persistS();const i=currentIndex(),slot=slots[i];if(slot&&hydrated.has(i)){slot.classList.toggle('s-done',s[it.id]==='done');slot.classList.toggle('s-doing',s[it.id]==='doing');}
-  updateActions();updateDots();updateSub();syncHistToday();
+  updateActions();updateDots();updateSub();syncHistToday();logTouch(curDay);
   if(kind==='done'&&s[it.id]==='done'){const t=todayStr();if(rest[t]){delete rest[t];persistR();}todayPlan[t]=curDay;persistTP();checkCelebrate();}
 }
 function checkCelebrate(){const ids=workout[curDay]||[],st=session[curDay]||{};if(ids.length&&ids.every(id=>st[id]==='done')){confetti();toast(DAYS.find(d=>d.key===curDay).name+' complete! 🔥');}}
@@ -584,6 +631,44 @@ function closeEdit(){document.getElementById('modal').classList.remove('show');e
 function saveEdit(){if(!editCtx)return;const {dayKey,id}=editCtx,cur=getPres(dayKey,id),cardio=cur.sets==null;if(!pres[dayKey])pres[dayKey]={};pres[dayKey][id]={sets:cardio?null:(parseInt(document.getElementById('setsVal').textContent)||1),reps:document.getElementById('repsInput').value.trim()||cur.reps};persistP();const i=currentIndex();closeEdit();renderDeck();requestAnimationFrame(()=>{scrollToCard(i,false);onScrollSettle();});}
 function removeFromWorkout(id){workout[curDay]=(workout[curDay]||[]).filter(x=>x!==id);if(session[curDay])delete session[curDay][id];persistW();persistS();const i=Math.max(0,currentIndex()-1);renderDeck();requestAnimationFrame(()=>{if(deckList.length){scrollToCard(i,false);onScrollSettle();}});}
 
+function persistSessions(){save('rack_sessions_v1',sessions);}
+function persistHr(){save('rack_hr_cfg',hrCfg);}
+function todaySession(key){return sessions.find(s=>s.date===todayStr()&&s.key===key);}
+function logStart(key){let s=todaySession(key);if(!s){s={date:todayStr(),key,start:Date.now(),end:Date.now(),done:0};sessions.push(s);if(sessions.length>120)sessions=sessions.slice(-120);}persistSessions();}
+function logTouch(key){const s=todaySession(key);if(!s)return;s.end=Date.now();s.done=Object.values(session[key]||{}).filter(v=>v==='done').length;persistSessions();}
+function fmtDur(ms){const m=Math.max(1,Math.round(ms/60000));return m<60?m+' min':Math.floor(m/60)+'h '+(m%60)+'m';}
+function sampleHR(start,end){const n=42;const out=[];let bpm=80;for(let i=0;i<n;i++){const t=start+(end-start)*i/(n-1);bpm+=(Math.random()-0.42)*9;bpm=Math.max(72,Math.min(134,bpm));if(i>n*0.45&&Math.random()<0.22)bpm+=10;bpm=Math.min(140,bpm);out.push({t:new Date(t).toISOString(),bpm:Math.round(bpm)});}return {samples:out,calories:173};}
+function openHR(key){curHRkey=key;const s=todaySession(key);const end=s?s.end:Date.now(),start=s?s.start:end-40*60000;document.getElementById('hrSub').textContent=DAYS.find(d=>d.key===key).name+' \u00b7 '+fmtDur(end-start);document.getElementById('hr').style.display='flex';document.getElementById('hrBody').innerHTML='<div class="hr-empty"><div style="font-size:42px">\u2764\uFE0F</div><p>Pulling your heart rate\u2026</p></div>';fetchHR(start,end);}
+function closeHR(){document.getElementById('hr').style.display='none';}
+function renderHREmpty(msg){document.getElementById('hrBody').innerHTML=`<div class="hr-empty"><div style="font-size:46px">\u2764\uFE0F</div><p>${msg}</p><button id="hrEmptySet">Open settings</button></div>`;document.getElementById('hrEmptySet').onclick=openSettings;}
+async function fetchHR(start,end){
+  if(hrCfg.url&&hrCfg.key){try{const u=hrCfg.url.replace(/\/+$/,'')+'/api/hr?start='+new Date(start).toISOString()+'&end='+new Date(end).toISOString()+'&key='+encodeURIComponent(hrCfg.key);const r=await fetch(u);if(!r.ok)throw 0;const d=await r.json();if(!d.samples||!d.samples.length){renderHREmpty('No heart-rate data for this window yet \u2014 your Fitbit may still be syncing. Try again in a few minutes.');return;}renderHR(d,start,end,false);return;}catch(e){renderHREmpty('Could not reach your Pulse app. Check the URL and key in settings.');return;}}
+  renderHR(sampleHR(start,end),start,end,true);
+}
+function zoneSummary(Z){const p=Math.round(Z.peak),c=Math.round(Z.cardio),f=Math.round(Z.fat);if(p>0)return `${p} min in peak, ${c} in cardio. Strong session.`;if(c>0)return `${c} min in cardio, ${f} in fat burn. Solid work.`;if(f>0)return `${f} min in the fat-burn zone.`;return 'Mostly light intensity this session.';}
+function renderHR(d,start,end,preview){
+  const samples=d.samples.map(s=>({t:new Date(s.t).getTime(),bpm:+s.bpm})).filter(s=>!isNaN(s.bpm));
+  if(!samples.length){renderHREmpty('No heart-rate samples returned for this window.');return;}
+  const bpms=samples.map(s=>s.bpm),avg=Math.round(bpms.reduce((a,b)=>a+b,0)/bpms.length),mx=Math.max(...bpms),mn=Math.min(...bpms);
+  const maxHR=hrCfg.maxHR||185,dur=end-start,per=dur/samples.length/60000;
+  const Z={below:0,fat:0,cardio:0,peak:0};samples.forEach(s=>{const p=s.bpm/maxHR;if(p>=0.85)Z.peak+=per;else if(p>=0.7)Z.cardio+=per;else if(p>=0.5)Z.fat+=per;else Z.below+=per;});
+  const tot=(Z.below+Z.fat+Z.cardio+Z.peak)||1;
+  const zoneDefs=[['Peak','#EF4444',Z.peak],['Cardio','#F59E0B',Z.cardio],['Fat burn','#34D399',Z.fat],['Light','#94A3B8',Z.below]];
+  const zoneRows=zoneDefs.map(([n,c,m])=>`<div class="zone-row"><span class="zd" style="background:${c}"></span><span class="zn">${n}</span><span class="zbar"><i style="width:${Math.round(m/tot*100)}%;background:${c}"></i></span><span class="zv">${Math.round(m)} min</span></div>`).join('');
+  const W=340,H=160,pad=8,lo=Math.min(mn,Math.round(maxHR*0.45)),hi=Math.max(mx,Math.round(maxHR*0.9));
+  const X=i=>pad+(W-2*pad)*i/(samples.length-1),Yf=b=>H-pad-(H-2*pad)*(b-lo)/((hi-lo)||1);
+  const pts=samples.map((s,i)=>`${X(i).toFixed(1)},${Yf(s.bpm).toFixed(1)}`).join(' ');
+  const thr=(pct,col)=>{const b=Math.round(maxHR*pct);if(b<lo||b>hi)return'';const y=Yf(b).toFixed(1);return `<line x1="${pad}" y1="${y}" x2="${W-pad-24}" y2="${y}" stroke="${col}" stroke-width="1" stroke-dasharray="2 3" opacity=".55"/><text x="${W-pad}" y="${(+y+3).toFixed(1)}" text-anchor="end" font-size="9" fill="${col}" font-family="JetBrains Mono">${b}</text>`;};
+  const chart=`<svg class="hr-chart" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none"><defs><linearGradient id="hrg" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#3B82F6"/><stop offset=".5" stop-color="#22C55E"/><stop offset=".78" stop-color="#F59E0B"/><stop offset="1" stop-color="#EF4444"/></linearGradient></defs>${thr(0.85,'#EF4444')}${thr(0.7,'#F59E0B')}${thr(0.5,'#34D399')}<polyline points="${pts}" fill="none" stroke="url(#hrg)" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/></svg>`;
+  const cals=d.calories?`<div class="hc"><div class="v">${d.calories}</div><div class="k">cal</div></div>`:'';
+  document.getElementById('hrBody').innerHTML=`<div class="hr-hero">${preview?'<span class="preview-badge">Sample preview</span>':''}<div class="hb"><span class="hbpm">${avg}</span><span class="hunit">bpm avg</span></div><div class="hsum">${zoneSummary(Z)}</div><div class="hr-chips"><div class="hc"><div class="v">${mx}</div><div class="k">max</div></div><div class="hc"><div class="v">${mn}</div><div class="k">min</div></div><div class="hc"><div class="v">${fmtDur(dur)}</div><div class="k">time</div></div>${cals}</div></div>
+    <div class="hr-card"><h5>Heart rate</h5>${chart}</div>
+    <div class="hr-card"><h5>Time in zones</h5>${zoneRows}</div>
+    ${preview?'<div class="hr-note">Sample data. Connect your Pulse app in settings (\u2699) to pull your real Fitbit heart rate after each workout.</div>':'<div class="hr-note">Pulled from your Fitbit via Pulse \u00b7 zones based on a '+maxHR+' bpm max</div>'}`;
+}
+function openSettings(){document.getElementById('setUrl').value=hrCfg.url||'';document.getElementById('setKey').value=hrCfg.key||'';document.getElementById('setMax').value=hrCfg.maxHR||185;document.getElementById('setModal').classList.add('show');}
+function closeSettings(){document.getElementById('setModal').classList.remove('show');}
+function saveSettings(){hrCfg.url=document.getElementById('setUrl').value.trim();hrCfg.key=document.getElementById('setKey').value.trim();hrCfg.maxHR=parseInt(document.getElementById('setMax').value)||185;persistHr();closeSettings();toast('Settings saved');}
 function wire(){
   let t;document.getElementById('track').addEventListener('scroll',()=>{clearTimeout(t);t=setTimeout(onScrollSettle,90);},{passive:true});
   document.getElementById('navToday').onclick=()=>showTab('today');
@@ -604,6 +689,12 @@ function wire(){
   document.getElementById('setsPlus').onclick=()=>{const v=document.getElementById('setsVal');v.textContent=Math.min(12,(parseInt(v.textContent)||1)+1);};
   document.getElementById('modalCancel').onclick=closeEdit;document.getElementById('modalSave').onclick=saveEdit;
   document.getElementById('modal').onclick=e=>{if(e.target.id==='modal')closeEdit();};
+  document.getElementById('gearBtn').onclick=openSettings;
+  document.getElementById('hrBack').onclick=closeHR;
+  document.getElementById('hrSettings').onclick=openSettings;
+  document.getElementById('setCancel').onclick=closeSettings;
+  document.getElementById('setSave').onclick=saveSettings;
+  document.getElementById('setModal').onclick=e=>{if(e.target.id==='setModal')closeSettings();};
   document.addEventListener('keydown',e=>{const deckOpen=document.getElementById('deck').style.display==='flex',modalOpen=document.getElementById('modal').classList.contains('show');if(deckOpen&&!modalOpen){if(e.key==='ArrowRight')scrollToCard(currentIndex()+1);if(e.key==='ArrowLeft')scrollToCard(currentIndex()-1);if(e.key==='Enter')setStatus('done');if(e.key==='Escape')closeDeck();}});
   window.addEventListener('resize',()=>{if(document.getElementById('deck').style.display==='flex'&&deckList.length){const i=currentIndex();scrollToCard(i,false);}});
 }
