@@ -337,9 +337,11 @@
   .cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
   .cal-head h5{font-family:'Bricolage Grotesque';font-weight:700;font-size:15px;margin:0;}
   .cal-head button{width:34px;height:34px;border-radius:11px;background:#F2F2F7;display:flex;align-items:center;justify-content:center;color:var(--muted);}
-  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
+  .cal-wd{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:6px;}
+  .cal-wd span{text-align:center;font-size:10px;font-weight:700;color:var(--faint);}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);grid-auto-rows:44px;gap:4px;align-content:start;}
   .cal-wl{text-align:center;font-size:10px;font-weight:700;color:var(--faint);padding-bottom:5px;}
-  .cal-cell{aspect-ratio:1;border-radius:11px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;position:relative;background:transparent;}
+  .cal-cell{height:44px;border-radius:11px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;position:relative;background:transparent;}
   .cal-cell.empty{visibility:hidden;}
   .cal-cell .cal-num{font-size:12.5px;font-weight:600;color:var(--text);font-family:'JetBrains Mono';}
   .cal-cell.has{background:#F1F1F7;}
@@ -680,7 +682,7 @@ function renderProgress(){
   document.getElementById('progBody').innerHTML=`
     <div class="streak-hero"><div class="flame">🔥</div><div class="big">${st}</div><div class="lbl">day streak</div><div class="msg">${msg}</div></div>
     <div class="stat-grid"><div class="stat"><span class="ic">💪</span><div class="v">${totalAll()}</div><div class="k">Total done</div></div><div class="stat"><span class="ic">📅</span><div class="v">${weekTotal()}</div><div class="k">This week</div></div><div class="stat"><span class="ic">🏆</span><div class="v">${bestDay()}</div><div class="k">Best day</div></div><div class="stat"><span class="ic">🎯</span><div class="v">${sectionsThisWeek()}/5</div><div class="k">Sections</div></div></div>
-    <div class="trk-card cal-card"><div class="cal-head"><button id="calPrev"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button><h5 id="calTitle"></h5><button id="calNext"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button></div><div class="cal-grid" id="calGrid"></div></div>
+    <div class="trk-card cal-card"><div class="cal-head"><button id="calPrev"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button><h5 id="calTitle"></h5><button id="calNext"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button></div><div class="cal-wd"><span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span></div><div class="cal-grid" id="calGrid"></div></div>
     <div id="dayDetail"></div>
     <div class="trk-card"><h5>By section <small>this week</small></h5>${rows}</div>`;
   document.getElementById('calPrev').onclick=()=>{calMonth=new Date(Date.UTC(calMonth.getUTCFullYear(),calMonth.getUTCMonth()-1,1));renderCalendar();};
@@ -767,8 +769,25 @@ function sampleHR(start,end){const n=42;const out=[];let bpm=80;for(let i=0;i<n;
 function openHRWindow(label,startISO,endISO){document.getElementById('hrSub').textContent=label;document.getElementById('hr').style.display='flex';document.getElementById('hrBody').innerHTML='<div class="hr-empty"><div style="font-size:42px">❤️</div><p>Pulling your heart rate…</p></div>';fetchHR(startISO,endISO);}
 function closeHR(){document.getElementById('hr').style.display='none';}
 function renderHREmpty(msg){document.getElementById('hrBody').innerHTML=`<div class="hr-empty"><div style="font-size:46px">\u2764\uFE0F</div><p>${msg}</p><button id="hrEmptySet">Open settings</button></div>`;document.getElementById('hrEmptySet').onclick=openSettings;}
+function hrCacheKey(start,end){return 'rack_hr:'+new Date(start).toISOString()+'|'+new Date(end).toISOString();}
+function hrCacheGet(start,end){try{const v=localStorage.getItem(hrCacheKey(start,end));return v?JSON.parse(v):null;}catch(e){return null;}}
+function hrCacheSet(start,end,d){try{localStorage.setItem(hrCacheKey(start,end),JSON.stringify({samples:d.samples,calories:d.calories,cachedAt:Date.now()}));}catch(e){}}
 async function getHR(start,end){
-  if(hrCfg.url&&hrCfg.key){try{const u=hrCfg.url.replace(/\/+$/,'')+'/api/hr?start='+new Date(start).toISOString()+'&end='+new Date(end).toISOString()+'&key='+encodeURIComponent(hrCfg.key);const r=await fetch(u);if(!r.ok)throw 0;const d=await r.json();if(!d.samples||!d.samples.length)return {empty:true};return {samples:d.samples,calories:d.calories};}catch(e){return {error:true};}}
+  const cached=hrCacheGet(start,end);
+  const endMs=Date.parse(end);
+  // A session that ended >10 min ago is fully synced & stable — serve cache instantly, no spinner, works offline.
+  if(cached&&isFinite(endMs)&&(Date.now()-endMs>600000))return {samples:cached.samples,calories:cached.calories,cached:true};
+  if(hrCfg.url&&hrCfg.key){
+    try{
+      const u=hrCfg.url.replace(/\/+$/,'')+'/api/hr?start='+new Date(start).toISOString()+'&end='+new Date(end).toISOString()+'&key='+encodeURIComponent(hrCfg.key);
+      const r=await fetch(u);if(!r.ok)throw 0;
+      const d=await r.json();
+      if(!d.samples||!d.samples.length)return cached?{samples:cached.samples,calories:cached.calories,cached:true}:{empty:true};
+      hrCacheSet(start,end,d);                       // store once loaded — never blank again
+      return {samples:d.samples,calories:d.calories};
+    }catch(e){return cached?{samples:cached.samples,calories:cached.calories,cached:true}:{error:true};}
+  }
+  if(cached)return {samples:cached.samples,calories:cached.calories,cached:true};
   return Object.assign({},sampleHR(start,end),{preview:true});
 }
 async function fetchHR(start,end){
@@ -808,7 +827,7 @@ function renderCalendar(){
   const y=calMonth.getUTCFullYear(),m=calMonth.getUTCMonth();
   document.getElementById('calTitle').textContent=calMonth.toLocaleDateString(undefined,{month:'long',year:'numeric',timeZone:'UTC'});
   const first=new Date(Date.UTC(y,m,1)).getUTCDay(),days=new Date(Date.UTC(y,m+1,0)).getUTCDate();
-  const wl=['S','M','T','W','T','F','S'];let cells=wl.map(w=>'<div class="cal-wl">'+w+'</div>').join('');
+  let cells='';
   for(let i=0;i<first;i++)cells+='<div class="cal-cell empty"></div>';
   const today=todayStr();
   for(let dd=1;dd<=days;dd++){
