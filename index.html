@@ -429,6 +429,8 @@
   .myw-chip .myw-th img{width:100%;height:100%;object-fit:cover;}
   .myw-chip .myw-n{font-size:12.5px;font-weight:600;text-transform:capitalize;white-space:nowrap;max-width:130px;overflow:hidden;text-overflow:ellipsis;}
   .myw-chip .myw-x{font-size:17px;line-height:1;color:var(--faint);font-weight:400;}
+  .hrm-cached{background:#DCFCE7!important;color:#15803D!important;}
+  .hr-refresh{background:none;color:var(--section);font-weight:700;text-decoration:underline;padding:0;font-size:inherit;}
 </style>
 </head>
 <body>
@@ -518,7 +520,7 @@ let DB={},POOL={},PLANSET={},PLANPRES={},ALLIDS=[];
 let workout={},pres={},session={},hist={},todayPlan={},rest={};
 let curDay=null,editCtx=null,libSection='push',forcePick=false;
 let sessions=[],hrCfg={url:'',key:'',maxHR:185},curHRkey=null;
-let userName='',todayView='picker',calMonth=null,calSelected=null,_hrgid=0;
+let userName='',todayView='picker',calMonth=null,calSelected=null,_hrgid=0,hrWin=null;
 let slots=[],deckList=[],hydrated=new Set(),activeGifIdx=-1;
 
 function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
@@ -768,7 +770,8 @@ function logStart(key){let s=todaySession(key);if(!s){s={date:todayStr(),key,sta
 function logTouch(key){const s=todaySession(key);if(!s)return;s.end=Date.now();s.done=Object.values(session[key]||{}).filter(v=>v==='done').length;persistSessions();}
 function fmtDur(ms){const m=Math.max(1,Math.round(ms/60000));return m<60?m+' min':Math.floor(m/60)+'h '+(m%60)+'m';}
 function sampleHR(start,end){const n=42;const out=[];let bpm=80;for(let i=0;i<n;i++){const t=start+(end-start)*i/(n-1);bpm+=(Math.random()-0.42)*9;bpm=Math.max(72,Math.min(134,bpm));if(i>n*0.45&&Math.random()<0.22)bpm+=10;bpm=Math.min(140,bpm);out.push({t:new Date(t).toISOString(),bpm:Math.round(bpm)});}return {samples:out,calories:173};}
-function openHRWindow(label,startISO,endISO){document.getElementById('hrSub').textContent=label;document.getElementById('hr').style.display='flex';document.getElementById('hrBody').innerHTML='<div class="hr-empty"><div style="font-size:42px">❤️</div><p>Pulling your heart rate…</p></div>';fetchHR(startISO,endISO);}
+function openHRWindow(label,startISO,endISO){hrWin=[startISO,endISO];document.getElementById('hrSub').textContent=label;document.getElementById('hr').style.display='flex';const c=hrCacheGet(startISO,endISO);if(c&&c.samples&&c.samples.length){renderHR({samples:c.samples,calories:c.calories,cached:true},startISO,endISO,false);return;}document.getElementById('hrBody').innerHTML='<div class="hr-empty"><div style="font-size:42px">❤️</div><p>Pulling your heart rate…</p></div>';fetchHR(startISO,endISO);}
+function refreshHR(){if(!hrWin)return;try{localStorage.removeItem(hrCacheKey(hrWin[0],hrWin[1]));}catch(e){}document.getElementById('hrBody').innerHTML='<div class="hr-empty"><div style="font-size:42px">❤️</div><p>Refreshing…</p></div>';fetchHR(hrWin[0],hrWin[1]);}
 function closeHR(){document.getElementById('hr').style.display='none';}
 function renderHREmpty(msg){document.getElementById('hrBody').innerHTML=`<div class="hr-empty"><div style="font-size:46px">\u2764\uFE0F</div><p>${msg}</p><button id="hrEmptySet">Open settings</button></div>`;document.getElementById('hrEmptySet').onclick=openSettings;}
 function hrCacheKey(start,end){return 'rack_hrc_'+Date.parse(start)+'_'+Date.parse(end);}
@@ -810,7 +813,7 @@ function renderHR(d,start,end,preview){
   document.getElementById('hrBody').innerHTML=`<div class="hr-hero">${preview?'<span class="preview-badge">Sample preview</span>':''}<div class="hb"><span class="hbpm">${avg}</span><span class="hunit">bpm avg</span></div><div class="hsum">${zoneSummary(Z)}</div><div class="hr-chips"><div class="hc"><div class="v">${mx}</div><div class="k">max</div></div><div class="hc"><div class="v">${mn}</div><div class="k">min</div></div><div class="hc"><div class="v">${fmtDur(dur)}</div><div class="k">time</div></div>${cals}</div></div>
     <div class="hr-card"><h5>Heart rate</h5>${chart}</div>
     <div class="hr-card"><h5>Time in zones</h5>${zoneRows}</div>
-    ${preview?'<div class="hr-note">Sample data. Connect your Pulse app in settings (\u2699) to pull your real Fitbit heart rate after each workout.</div>':'<div class="hr-note">Pulled from your Fitbit via Pulse \u00b7 zones based on a '+maxHR+' bpm max</div>'}`;
+    ${preview?'<div class="hr-note">Sample data. Connect your Pulse app in settings to pull your real Fitbit heart rate after each workout.</div>':(d.cached?'<div class="hr-note">Loaded instantly from cache · <button class="hr-refresh" onclick="refreshHR()">refresh</button></div>':'<div class="hr-note">Pulled from your Fitbit via Pulse · zones based on a '+maxHR+' bpm max</div>')}`;
 }
 function openSettings(){document.getElementById('setName').value=userName||'';document.getElementById('setUrl').value=hrCfg.url||'';document.getElementById('setKey').value=hrCfg.key||'';document.getElementById('setMax').value=hrCfg.maxHR||185;document.getElementById('setModal').classList.add('show');}
 function closeSettings(){document.getElementById('setModal').classList.remove('show');}
@@ -856,9 +859,12 @@ function renderHRCompact(d,start,end,preview){
   const samples=d.samples.map(s=>({t:new Date(s.t).getTime(),bpm:+s.bpm})).filter(s=>!isNaN(s.bpm)).sort((a,b)=>a.t-b.t);
   if(!samples.length)return '<div class="hr-mini-msg">No heart-rate samples.</div>';
   const maxHR=hrCfg.maxHR||185,ws=Date.parse(start),we=Date.parse(end);const c=hrCompute(samples,maxHR,ws,we);
-  return '<div class="hrm">'+(preview?'<span class="hrm-prev">sample</span>':'')+'<div class="hrm-row"><div class="hrm-stat"><b>'+c.avg+'</b><span>avg bpm</span></div><div class="hrm-stat"><b>'+c.mx+'</b><span>max</span></div>'+(d.calories?'<div class="hrm-stat"><b>'+d.calories+'</b><span>cal</span></div>':'')+'</div>'+hrSpark(samples,maxHR,300,52)+hrZoneMini(c.Z,c.tot)+'</div>';
+  return '<div class="hrm">'+(preview?'<span class="hrm-prev">sample</span>':(d.cached?'<span class="hrm-prev hrm-cached">cached</span>':''))+'<div class="hrm-row"><div class="hrm-stat"><b>'+c.avg+'</b><span>avg bpm</span></div><div class="hrm-stat"><b>'+c.mx+'</b><span>max</span></div>'+(d.calories?'<div class="hrm-stat"><b>'+d.calories+'</b><span>cal</span></div>':'')+'</div>'+hrSpark(samples,maxHR,300,52)+hrZoneMini(c.Z,c.tot)+'</div>';
 }
 async function loadHRInto(el,start,end){
+  const c=hrCacheGet(start,end);
+  if(c&&c.samples&&c.samples.length){el.innerHTML=renderHRCompact({samples:c.samples,calories:c.calories,cached:true},start,end,false);return;}
+  el.innerHTML='<div class="hr-mini-msg">Loading heart rate…</div>';
   const d=await getHR(start,end);
   if(d.error){el.innerHTML='<div class="hr-mini-msg">Could not reach Pulse — check settings.</div>';return;}
   if(d.empty){el.innerHTML='<div class="hr-mini-msg">No heart-rate data for this window yet.</div>';return;}
