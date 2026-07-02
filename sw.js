@@ -1,4 +1,4 @@
-const SHELL='rack-shell-v9';
+const SHELL='rack-shell-v10';
 const MEDIA='rack-media-v2';
 const SHELL_FILES=['./','./index.html','./manifest.json','./icon-192.png','./icon-512.png','./icon-180.png'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(SHELL).then(c=>c.addAll(SHELL_FILES)).then(()=>self.skipWaiting()));});
@@ -7,7 +7,7 @@ self.addEventListener('fetch',e=>{
   const url=e.request.url;
   if(e.request.method!=='GET')return;
   // jsDelivr media: cache-first, store for offline
-  if(url.includes('cdn.jsdelivr.net')){
+  if(url.includes('static.exercisedb.dev')||url.includes('cdn.jsdelivr.net')){
     e.respondWith(caches.open(MEDIA).then(async c=>{
       const hit=await c.match(e.request); if(hit)return hit;
       try{const res=await fetch(e.request); if(res.ok)c.put(e.request,res.clone()); return res;}catch(err){return hit||Response.error();}
