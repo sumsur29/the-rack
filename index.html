@@ -431,6 +431,14 @@
   .myw-chip .myw-x{font-size:17px;line-height:1;color:var(--faint);font-weight:400;}
   .hrm-cached{background:#DCFCE7!important;color:#15803D!important;}
   .hr-refresh{background:none;color:var(--section);font-weight:700;text-decoration:underline;padding:0;font-size:inherit;}
+  .dd-del{margin-left:auto;width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;color:var(--faint);background:#F2F2F7;flex-shrink:0;}
+  .dd-del svg{width:16px;height:16px;}
+  .dd-del:active{background:#FEE2E2;color:#E11D48;}
+  .dd-confirm{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .dd-confirm span{font-size:13.5px;font-weight:600;}
+  .dd-cbtns{display:flex;gap:8px;margin-left:auto;}
+  .dd-cancel{font-size:12.5px;font-weight:600;color:var(--muted);background:#F2F2F7;padding:8px 14px;border-radius:20px;}
+  .dd-yes{font-size:12.5px;font-weight:700;color:#fff;background:linear-gradient(160deg,#FF5A5F,#E11D48);padding:8px 16px;border-radius:20px;}
 </style>
 </head>
 <body>
@@ -504,6 +512,8 @@ const DB_RAW=[{"i":"0001","n":"3/4 sit-up","b":"waist","q":"body weight","t":"ab
 const MEDIA_CDN='https://cdn.jsdelivr.net/gh/mohamedatef90/exercise-library@main/gifs/';
 const mediaId=e=>{const s=(e&&(e.img||e.gif))||'';const f=s.split('/').pop().replace(/\.[a-z0-9]+$/i,'');const d=f.indexOf('-');return d>=0?f.slice(d+1):f;};
 const imgURL=e=>MEDIA_CDN+mediaId(e)+'.gif',gifURL=e=>MEDIA_CDN+mediaId(e)+'.gif';
+const fbURL=e=>'/gifs/'+mediaId(e)+'.gif';
+function imgErr(el){var fb=el.getAttribute('data-fb');if(fb){el.removeAttribute('data-fb');if('jpg' in el.dataset)el.dataset.jpg=fb;if('gif' in el.dataset)el.dataset.gif=fb;el.src=fb;return;}var m=el.getAttribute('data-final');if(m==='ph'){el.style.display='none';var p=el.parentNode.querySelector('.ph');if(p)p.style.display='flex';}else if(m==='remove'){el.remove();}else{el.style.opacity=0;}}
 const BPORDER=['chest','back','shoulders','upper arms','lower arms','upper legs','lower legs','waist','cardio','neck'];
 const DAYS=[
   {key:'push',name:'Push',focus:'Chest · Shoulders · Triceps',bodyParts:['chest','shoulders'],targets:['triceps'],subs:[{l:'Chest',t:e=>e.b==='chest'},{l:'Shoulders',t:e=>e.b==='shoulders'},{l:'Triceps',t:e=>e.t==='triceps'}],def:[['0314',4,'8–10'],['0289',3,'8–10'],['0577',3,'10–12'],['0334',4,'15'],['0200',3,'12–15']]},
@@ -601,7 +611,7 @@ function pickerHTML(){
   const t=todayStr();let banner='';
   if(rest[t]){banner='<button class="status-banner rest" id="restBanner"><span class="sb-ic">🌙</span><div><b>Rest day</b><span>Recovery logged · streak safe</span></div><span class="sb-undo">Undo</span></button>';}
   else{const key=getTodayKey();if(key){const ids=workout[key]||[],stt=session[key]||{},done=ids.filter(id=>stt[id]==='done').length;if(done>0){const d=DAYS.find(x=>x.key===key);const full=done>=ids.length;banner='<button class="status-banner" id="contBanner" style="--h:'+HUES[key]+'"><span class="sb-ic">'+(full?'✅':'⏱️')+'</span><div><b>'+(full?(d.name+' complete'):('Continue '+d.name))+'</b><span>'+done+'/'+ids.length+' done today</span></div><span class="sb-go">›</span></button>';}}}
-  const tile=d=>{const n=(workout[d.key]||[]).length;const wide=d.key==='upper';return '<button class="pick-tile '+(wide?'wide':'')+'" data-k="'+d.key+'" style="--h:'+HUES[d.key]+'"><img class="tile-img" loading="lazy" src="'+imgURL(DB[REP[d.key]])+'" alt="" onerror="this.remove()"><div class="pt-scrim"></div><div class="pt-body"><div class="pn">'+d.name+'</div><div class="pf">'+d.focus+'</div></div><div class="pt-foot"><span class="pc">'+n+' exercise'+(n===1?'':'s')+'</span><span class="pt-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div></button>';};
+  const tile=d=>{const n=(workout[d.key]||[]).length;const wide=d.key==='upper';return '<button class="pick-tile '+(wide?'wide':'')+'" data-k="'+d.key+'" style="--h:'+HUES[d.key]+'"><img class="tile-img" loading="lazy" src="'+imgURL(DB[REP[d.key]])+'" alt="" data-fb="'+fbURL(DB[REP[d.key]])+'" data-final="remove" onerror="imgErr(this)"><div class="pt-scrim"></div><div class="pt-body"><div class="pn">'+d.name+'</div><div class="pf">'+d.focus+'</div></div><div class="pt-foot"><span class="pc">'+n+' exercise'+(n===1?'':'s')+'</span><span class="pt-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div></button>';};
   const four=DAYS.filter(d=>d.key!=='upper').map(tile).join('');
   const up=tile(DAYS.find(d=>d.key==='upper'));
   return (banner?('<div class="status-wrap">'+banner+'</div>'):'')+'<div class="pick-grid">'+four+up+'<button class="pick-rest" data-k="rest"><span class="moon">🌙</span><div><b>Rest day</b><span>Log recovery · keep your streak safe</span></div></button></div>';
@@ -616,10 +626,10 @@ function pickRest(){const t=todayStr();rest[t]=1;todayPlan[t]='rest';persistR();
 function sessionHTML(key){
   const d=DAYS.find(x=>x.key===key),ids=workout[key]||[],st=session[key]||{};
   const done=ids.filter(id=>st[id]==='done').length,total=ids.length,pct=total?Math.round(done/total*100):0;
-  const rows=ids.map((id,idx)=>{const ex=DB[id];if(!ex)return'';const p=getPres(key,id);const dn=st[id]==='done';const reps=p.sets==null?p.reps:(p.sets+'×'+p.reps);return '<div class="swipe-wrap" data-id="'+id+'" data-i="'+idx+'"><button class="swipe-del" data-del="'+id+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6"/></svg>Delete</button><button class="mli" data-i="'+idx+'"><div class="mthumb"><img loading="lazy" src="'+imgURL(ex)+'" onerror="this.style.opacity=0"></div><div class="mname">'+ex.n+'</div><div class="mreps">'+reps+'</div><div class="mchk '+(dn?'done':'')+'">'+(dn?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>':'')+'</div></button></div>';}).join('');
+  const rows=ids.map((id,idx)=>{const ex=DB[id];if(!ex)return'';const p=getPres(key,id);const dn=st[id]==='done';const reps=p.sets==null?p.reps:(p.sets+'×'+p.reps);return '<div class="swipe-wrap" data-id="'+id+'" data-i="'+idx+'"><button class="swipe-del" data-del="'+id+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6"/></svg>Delete</button><button class="mli" data-i="'+idx+'"><div class="mthumb"><img loading="lazy" src="'+imgURL(ex)+'" data-fb="'+fbURL(ex)+'" onerror="imgErr(this)"></div><div class="mname">'+ex.n+'</div><div class="mreps">'+reps+'</div><div class="mchk '+(dn?'done':'')+'">'+(dn?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>':'')+'</div></button></div>';}).join('');
   const rowsHTML=ids.length?rows:'<div class="mli-more">No exercises yet — tap ＋ Add / edit</div>';
   return '<button class="back-chip" id="backChip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>All workouts</button>'+
-    '<div class="sess"><img class="sess-img" src="'+imgURL(DB[REP[key]])+'" alt="" onerror="this.remove()">'+
+    '<div class="sess"><img class="sess-img" src="'+imgURL(DB[REP[key]])+'" alt="" data-fb="'+fbURL(DB[REP[key]])+'" data-final="remove" onerror="imgErr(this)">'+
     '<div class="sess-content"><div class="sess-eyebrow">Today’s session</div><div class="sess-name">'+d.name+'</div><div class="sess-meta">'+total+' exercise'+(total===1?'':'s')+' · ~'+estMin(key)+' min</div><div class="sess-focus">'+d.focus+'</div>'+
     '<div class="sess-prog"><i style="width:'+pct+'%"></i></div><div class="sess-prog-txt">'+done+' of '+total+' done</div>'+
     '<button class="sess-start" id="startBtn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>'+(done?'Continue':'Start')+' workout</button>'+
@@ -628,7 +638,7 @@ function sessionHTML(key){
 }
 function wireSession(key){
   document.getElementById('backChip').onclick=()=>{todayView='picker';renderTodayView();};
-  document.getElementById('startBtn').onclick=()=>openDeck(key,firstUndone(key));
+  document.getElementById('startBtn').onclick=()=>openDeck(key,firstUndone(key),true);
   document.getElementById('reorderBtn').onclick=()=>openReorder(key);
   document.getElementById('editBtn').onclick=()=>{libSection=key;showTab('library');};
   wireSwipe(key);
@@ -654,7 +664,7 @@ function buildChips(){
   document.querySelectorAll('#chips .chip').forEach(c=>c.onclick=()=>{catEquip=c.dataset.eq;buildChips();renderCatalog();});
 }
 function gcardHTML(id){const ex=DB[id];const added=(workout[libSection]||[]).includes(id);const plan=PLANSET[libSection].has(id);
-  return `<button class="gcard ${added?'gin':''}" data-tg="${id}">${plan?'<span class="gstar">★</span>':''}<span class="gflag">${added?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>'}</span><div class="gthumb"><img loading="lazy" src="${imgURL(ex)}" onerror="this.style.opacity=0"></div><div class="gbody"><div class="gname">${ex.n}</div><div class="gmeta">${ex.t} · ${ex.q}</div></div></button>`;}
+  return `<button class="gcard ${added?'gin':''}" data-tg="${id}">${plan?'<span class="gstar">★</span>':''}<span class="gflag">${added?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>'}</span><div class="gthumb"><img loading="lazy" src="${imgURL(ex)}" data-fb="${fbURL(ex)}" onerror="imgErr(this)"></div><div class="gbody"><div class="gname">${ex.n}</div><div class="gmeta">${ex.t} · ${ex.q}</div></div></button>`;}
 function renderCatalog(){
   const grid=document.getElementById('catGrid');const ids=catFilteredIds();
   if(!ids.length){grid.innerHTML='<div class="empty">No exercises match.</div>';return;}
@@ -708,8 +718,8 @@ function showTab(tab){
 /* ---------- DECK ---------- */
 function steps(ex){const t=ex.h||'';return t.split(/(?<=[.!?])\s+/).map(s=>s.trim()).filter(s=>s.length>1);}
 function buildList(){return (workout[curDay]||[]).filter(id=>DB[id]).map(id=>{const p=getPres(curDay,id);return {id,sets:p.sets,reps:p.reps,inPlan:PLANSET[curDay].has(id)};});}
-function openDeck(key,start){
-  curDay=key;setSection(HUES[key]);logStart(key);todayView=key;
+function openDeck(key,start,begin){
+  curDay=key;setSection(HUES[key]);todayView=key;if(begin)logStart(key);
   document.getElementById('deckTitle').textContent=DAYS.find(d=>d.key===key).name;
   renderDeck();document.getElementById('deck').style.display='flex';
   requestAnimationFrame(()=>{scrollToCard(start||0,false);onScrollSettle();});
@@ -721,7 +731,7 @@ function cardHTML(it,i,total){
   const pb=cardio?`<div><div class="big">${it.reps}</div><div class="lbl">Cardio</div></div>`:`<div><div class="big">${it.sets} × ${it.reps}</div><div class="lbl">Sets × reps</div></div>`;
   const sec=(ex.s||[]).slice(0,2).map(m=>`<span class="tag">${m}</span>`).join('');
   const sh=steps(ex).map(s=>`<li>${s}</li>`).join('');
-  return `<div class="media"><img loading="lazy" data-jpg="${imgURL(ex)}" data-gif="${gifURL(ex)}" src="${imgURL(ex)}" onerror="this.style.display='none';this.parentNode.querySelector('.ph').style.display='flex'"><div class="ph" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5l11 11"/><path d="M3.8 8.3l2-2M8.3 3.8l-2 2"/><path d="M20.2 15.7l-2 2M15.7 20.2l2-2"/><path d="M4.7 9.2 2.9 11a2 2 0 0 0 0 2.8l1.3 1.3a2 2 0 0 0 2.8 0l1.8-1.8"/><path d="M19.3 14.8l1.8-1.8a2 2 0 0 0 0-2.8l-1.3-1.3a2 2 0 0 0-2.8 0L15 10.7"/></svg>No preview</div><span class="idx mono">${i+1}/${total}</span><span class="stamp done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Done</span><span class="stamp doing"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Doing</span></div>
+  return `<div class="media"><img loading="lazy" data-jpg="${imgURL(ex)}" data-gif="${gifURL(ex)}" src="${imgURL(ex)}" data-fb="${fbURL(ex)}" data-final="ph" onerror="imgErr(this)"><div class="ph" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5l11 11"/><path d="M3.8 8.3l2-2M8.3 3.8l-2 2"/><path d="M20.2 15.7l-2 2M15.7 20.2l2-2"/><path d="M4.7 9.2 2.9 11a2 2 0 0 0 0 2.8l1.3 1.3a2 2 0 0 0 2.8 0l1.8-1.8"/><path d="M19.3 14.8l1.8-1.8a2 2 0 0 0 0-2.8l-1.3-1.3a2 2 0 0 0-2.8 0L15 10.7"/></svg>No preview</div><span class="idx mono">${i+1}/${total}</span><span class="stamp done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Done</span><span class="stamp doing"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Doing</span></div>
     <div class="ex-name">${ex.n}</div><div class="ex-tags">${it.inPlan?'<span class="tag plan">★ In plan</span>':''}<span class="tag tgt">${ex.t}</span><span class="tag">${ex.q}</span>${sec}</div>
     <div class="pres ${cardio?'cardio':''}">${pb}<button class="edit" data-edit="${it.id}">Edit</button></div>
     <details class="how"><summary>How to perform <span class="chev"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span></summary><ol>${sh}</ol></details>
@@ -753,7 +763,7 @@ function setStatus(kind){
   const s=session[curDay],cur=s[it.id];
   if(kind==='doing'){Object.keys(s).forEach(k=>{if(s[k]==='doing')delete s[k];});if(cur!=='doing')s[it.id]='doing';}else{if(cur==='done')delete s[it.id];else s[it.id]='done';}
   persistS();const i=currentIndex(),slot=slots[i];if(slot&&hydrated.has(i)){slot.classList.toggle('s-done',s[it.id]==='done');slot.classList.toggle('s-doing',s[it.id]==='doing');}
-  updateActions();updateDots();updateSub();syncHistToday();logTouch(curDay);
+  updateActions();updateDots();updateSub();syncHistToday();logStart(curDay);logTouch(curDay);
   if(kind==='done'&&s[it.id]==='done'){const t=todayStr();if(rest[t]){delete rest[t];persistR();}todayPlan[t]=curDay;persistTP();checkCelebrate();}
 }
 function checkCelebrate(){const ids=workout[curDay]||[],st=session[curDay]||{};if(ids.length&&ids.every(id=>st[id]==='done')){confetti();toast(DAYS.find(d=>d.key===curDay).name+' complete! 🔥');}}
@@ -843,15 +853,18 @@ function renderCalendar(){
 function renderDayDetail(){
   const el=document.getElementById('dayDetail');if(!el)return;const key=calSelected;
   const dlabel=new Date(key+'T12:00:00Z').toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric',timeZone:'UTC'});
-  const sess=sessions.filter(s=>s.date===key).sort((a,b)=>a.start-b.start);const hh=hist[key];let inner='';
+  const sess=sessions.filter(s=>s.date===key&&s.done>0).sort((a,b)=>a.start-b.start);const hh=hist[key];let inner='';
   if(rest[key]){inner='<div class="dd-rest">🌙 Rest day — recovery logged.</div>';}
-  else if(sess.length){inner=sess.map((s,i)=>{const d=DAYS.find(x=>x.key===s.key);const dur=fmtDur((s.end||s.start)-s.start);const tr=fmtTime(s.start)+' – '+fmtTime(s.end||s.start);return '<div class="dd-sess" data-win="'+new Date(s.start).toISOString()+'|'+new Date(s.end||s.start).toISOString()+'|'+(d?d.name:s.key)+'" style="--h:'+(HUES[s.key]||'#FF6A4D')+'"><div class="dd-top"><span class="dd-dot"></span><div class="dd-info"><b>'+(d?d.name:s.key)+'</b><span>'+tr+' · '+dur+' · '+s.done+' exercise'+(s.done===1?'':'s')+'</span></div></div><div class="dd-hr" id="ddhr'+i+'"></div></div>';}).join('');}
+  else if(sess.length){inner=sess.map((s,i)=>{const d=DAYS.find(x=>x.key===s.key);const dur=fmtDur((s.end||s.start)-s.start);const tr=fmtTime(s.start)+' – '+fmtTime(s.end||s.start);return '<div class="dd-sess" data-win="'+new Date(s.start).toISOString()+'|'+new Date(s.end||s.start).toISOString()+'|'+(d?d.name:s.key)+'" data-d="'+s.date+'" data-k="'+s.key+'" data-s="'+s.start+'" style="--h:'+(HUES[s.key]||'#FF6A4D')+'"><div class="dd-top"><span class="dd-dot"></span><div class="dd-info"><b>'+(d?d.name:s.key)+'</b><span>'+tr+' · '+dur+' · '+s.done+' exercise'+(s.done===1?'':'s')+'</span></div><button class="dd-del" aria-label="Delete workout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6"/></svg></button></div><div class="dd-hr" id="ddhr'+i+'"></div></div>';}).join('');}
   else if(hh){const tot=dayTotal(hh);const names=Object.keys(hh).map(k=>{const d=DAYS.find(x=>x.key===k);return d?d.name:k;}).join(', ');inner='<div class="dd-sess"><div class="dd-top"><div class="dd-info"><b>'+tot+' exercise'+(tot===1?'':'s')+' completed</b><span>'+names+'</span></div></div></div>';}
   else{inner='<div class="dd-empty">No workout logged this day.</div>';}
   el.innerHTML='<div class="trk-card"><h5>'+dlabel+'</h5>'+inner+'</div>';
   sess.forEach((s,i)=>{const box=document.getElementById('ddhr'+i);if(box)loadHRInto(box,new Date(s.start).toISOString(),new Date(s.end||s.start).toISOString());});
-  el.querySelectorAll('.dd-sess[data-win]').forEach(c=>{c.onclick=(e)=>{if(e.target.closest('.dd-hr'))return;const parts=c.dataset.win.split('|');openHRWindow(parts[2],parts[0],parts[1]);};});
+  el.querySelectorAll('.dd-sess[data-win]').forEach(c=>{c.onclick=(e)=>{if(e.target.closest('.dd-hr')||e.target.closest('.dd-del'))return;const parts=c.dataset.win.split('|');openHRWindow(parts[2],parts[0],parts[1]);};});
+  el.querySelectorAll('.dd-del').forEach(b=>b.onclick=e=>{e.stopPropagation();delSessAsk(b);});
 }
+function delSessAsk(btn){var row=btn.closest('.dd-sess');row.onclick=null;var nm=(row.querySelector('.dd-info b')||{}).textContent||'this workout';row.innerHTML='<div class="dd-confirm"><span>Delete '+nm+'?</span><div class="dd-cbtns"><button class="dd-cancel">Cancel</button><button class="dd-yes">Delete</button></div></div>';row.querySelector('.dd-cancel').onclick=function(){renderDayDetail();};row.querySelector('.dd-yes').onclick=function(){deleteSession(row.dataset.d,row.dataset.k,+row.dataset.s);};}
+function deleteSession(date,key,start){sessions=sessions.filter(function(s){return !(s.date===date&&s.key===key&&s.start===start);});persistSessions();if(hist[date]&&hist[date][key]){delete hist[date][key];if(!Object.keys(hist[date]).length)delete hist[date];saveHist();}if(date===todayStr()&&session[key]){delete session[key];persistS();}renderProgress();toast('Workout deleted');}
 function hrCompute(samples,maxHR,ws,we){const b=samples.map(s=>s.bpm);const avg=Math.round(b.reduce((a,x)=>a+x,0)/b.length),mx=Math.max.apply(null,b),mn=Math.min.apply(null,b);const per=(we-ws)/samples.length/60000;const Z={below:0,fat:0,cardio:0,peak:0};samples.forEach(s=>{const p=s.bpm/maxHR;if(p>=.85)Z.peak+=per;else if(p>=.7)Z.cardio+=per;else if(p>=.5)Z.fat+=per;else Z.below+=per;});return {avg,mx,mn,Z,tot:(Z.below+Z.fat+Z.cardio+Z.peak)||1};}
 function hrSpark(samples,maxHR,W,H){const id='hrgm'+(++_hrgid);const b=samples.map(s=>s.bpm);const lo=Math.min(Math.min.apply(null,b),Math.round(maxHR*.45)),hi=Math.max(Math.max.apply(null,b),Math.round(maxHR*.9));const X=i=>4+(W-8)*i/Math.max(1,samples.length-1),Y=v=>H-4-(H-8)*(v-lo)/((hi-lo)||1);const pts=samples.map((s,i)=>X(i).toFixed(1)+','+Y(s.bpm).toFixed(1)).join(' ');return '<svg class="hrm-spark" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none"><defs><linearGradient id="'+id+'" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#3B82F6"/><stop offset=".5" stop-color="#22C55E"/><stop offset=".8" stop-color="#F59E0B"/><stop offset="1" stop-color="#EF4444"/></linearGradient></defs><polyline points="'+pts+'" fill="none" stroke="url(#'+id+')" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg>';}
 function hrZoneMini(Z,tot){const defs=[['Peak','#EF4444',Z.peak],['Cardio','#F59E0B',Z.cardio],['Fat','#34D399',Z.fat],['Light','#94A3B8',Z.below]];return '<div class="hrm-zones">'+defs.map(z=>'<div class="hrm-zrow"><span class="hrm-zd" style="background:'+z[1]+'"></span><span class="hrm-zn">'+z[0]+'</span><span class="hrm-zbar"><i style="width:'+Math.round(z[2]/tot*100)+'%;background:'+z[1]+'"></i></span><span class="hrm-zv">'+Math.round(z[2])+'m</span></div>').join('')+'</div>';}
@@ -872,7 +885,7 @@ async function loadHRInto(el,start,end){
 }
 let roKey=null;
 function openReorder(key){roKey=key;setSection(HUES[key]);const ids=workout[key]||[];document.getElementById('reBody').innerHTML=ids.map((id,i)=>roRow(id,i)).join('');document.getElementById('reorder').style.display='flex';wireReorderDrag();}
-function roRow(id,i){const ex=DB[id];if(!ex)return '';const p=getPres(roKey,id);const reps=p.sets==null?p.reps:(p.sets+'×'+p.reps);return '<div class="re-row" data-id="'+id+'"><div class="re-handle"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.6"/><circle cx="15" cy="6" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="18" r="1.6"/><circle cx="15" cy="18" r="1.6"/></svg></div><div class="re-thumb"><img loading="lazy" src="'+imgURL(ex)+'" onerror="this.style.opacity=0"></div><div class="re-info"><div class="re-name">'+ex.n+'</div><div class="re-reps">'+reps+'</div></div><div class="re-num">'+(i+1)+'</div></div>';}
+function roRow(id,i){const ex=DB[id];if(!ex)return '';const p=getPres(roKey,id);const reps=p.sets==null?p.reps:(p.sets+'×'+p.reps);return '<div class="re-row" data-id="'+id+'"><div class="re-handle"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.6"/><circle cx="15" cy="6" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="18" r="1.6"/><circle cx="15" cy="18" r="1.6"/></svg></div><div class="re-thumb"><img loading="lazy" src="'+imgURL(ex)+'" data-fb="'+fbURL(ex)+'" onerror="imgErr(this)"></div><div class="re-info"><div class="re-name">'+ex.n+'</div><div class="re-reps">'+reps+'</div></div><div class="re-num">'+(i+1)+'</div></div>';}
 function renumberRO(){document.querySelectorAll('#reBody .re-row').forEach((r,i)=>{const n=r.querySelector('.re-num');if(n)n.textContent=i+1;});}
 function closeReorder(doSave){if(doSave){const order=[...document.querySelectorAll('#reBody .re-row')].map(r=>r.dataset.id);if(order.length){workout[roKey]=order;persistW();toast('Order saved');}}document.getElementById('reorder').style.display='none';todayView=roKey;renderTodayView();}
 function wireReorderDrag(){
@@ -923,7 +936,7 @@ function wireSwipe(key){
 function mywHTML(){
   const ids=(workout[libSection]||[]).filter(id=>DB[id]);
   if(!ids.length)return '<div id="mywTray" class="myw"><div class="myw-h"><span class="myw-dot"></span>My workout · 0<span class="line"></span></div><div class="myw-empty">Nothing added yet. Tap ＋ on any exercise below.</div></div>';
-  const chips=ids.map(id=>{const ex=DB[id];return '<button class="myw-chip" data-rm="'+id+'"><span class="myw-th"><img loading="lazy" src="'+imgURL(ex)+'" onerror="this.style.opacity=0"></span><span class="myw-n">'+ex.n+'</span><span class="myw-x">×</span></button>';}).join('');
+  const chips=ids.map(id=>{const ex=DB[id];return '<button class="myw-chip" data-rm="'+id+'"><span class="myw-th"><img loading="lazy" src="'+imgURL(ex)+'" data-fb="'+fbURL(ex)+'" onerror="imgErr(this)"></span><span class="myw-n">'+ex.n+'</span><span class="myw-x">×</span></button>';}).join('');
   return '<div id="mywTray" class="myw"><div class="myw-h"><span class="myw-dot"></span>My workout · '+ids.length+'<span class="line"></span></div><div class="myw-row">'+chips+'</div></div>';
 }
 function updLibCounts(){document.querySelectorAll('#libTabs .libtab').forEach((t,i)=>{if(DAYS[i].key===libSection)t.innerHTML='<span class="d"></span>'+DAYS[i].name+' · '+(workout[libSection]||[]).length;});}
