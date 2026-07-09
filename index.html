@@ -708,9 +708,11 @@ function renderProgress(){
   const wago=Date.now()-7*86400000;
   const wsess=sessions.filter(s=>s.done>0&&s.start>=wago);
   const wcount=wsess.length,wtime=wsess.reduce((a,s)=>a+Math.max(0,(s.end||s.start)-s.start),0);
-  const bal=DAYS.map(d=>({d:d,days:lastTrainedDays(d.key)}));
+  const MUS=[['Chest','#FF6A4D',['push','upper']],['Back','#7C5CFC',['pull','upper']],['Shoulders','#F59E0B',['push','arms','upper']],['Biceps','#17B890',['pull','arms','upper']],['Triceps','#FF5DA2',['push','arms','upper']],['Legs & Core','#3B82F6',['legs']]];
+  const musDays=ks=>{let best=null;ks.forEach(k=>{const d=lastTrainedDays(k);if(d!=null&&(best==null||d<best))best=d;});return best;};
+  const bal=MUS.map(m=>({name:m[0],color:m[1],days:musDays(m[2])}));
   bal.sort((a,b)=>(b.days==null?9999:b.days)-(a.days==null?9999:a.days));
-  const balRows=bal.map(x=>{const d=x.d,dd=x.days;let lab,cls='';if(dd==null){lab='not yet';cls=' lt-never';}else if(dd===0){lab='today';cls=' lt-fresh';}else if(dd===1){lab='yesterday';}else{lab=dd+'d ago';if(dd>=4)cls=' lt-stale';}return `<div class="lt-row"><span class="dot" style="background:${HUES[d.key]}"></span><span class="nm">${d.name}</span><span class="lt-when${cls}">${lab}</span></div>`;}).join('');
+  const balRows=bal.map(x=>{const dd=x.days;let lab,cls='';if(dd==null){lab='not yet';cls=' lt-never';}else if(dd===0){lab='today';cls=' lt-fresh';}else if(dd===1){lab='yesterday';}else{lab=dd+'d ago';if(dd>=4)cls=' lt-stale';}return `<div class="lt-row"><span class="dot" style="background:${x.color}"></span><span class="nm">${x.name}</span><span class="lt-when${cls}">${lab}</span></div>`;}).join('');
   document.getElementById('progBody').innerHTML=`
     <div class="streak-hero"><div class="flame">🔥</div><div class="big">${st}</div><div class="lbl">day streak</div><div class="msg">${msg}</div></div>
     <div class="wk-strip"><div class="wk-item"><b>${wcount}</b><span>workout${wcount===1?'':'s'} this week</span></div><div class="wk-sep"></div><div class="wk-item"><b>${wcount?fmtDur(wtime):'\u2014'}</b><span>time trained</span></div></div>
