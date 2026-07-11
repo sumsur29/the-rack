@@ -338,7 +338,7 @@
   .cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
   .cal-head h5{font-family:'Bricolage Grotesque';font-weight:700;font-size:15px;margin:0;}
   .cal-head button{width:34px;height:34px;border-radius:11px;background:#F2F2F7;display:flex;align-items:center;justify-content:center;color:var(--muted);}
-  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;grid-auto-rows:44px;}
+  .cal-grid{display:grid !important;grid-template-columns:repeat(7,1fr) !important;gap:4px !important;grid-auto-rows:44px !important;align-content:start !important;}.cal-grid .cw{height:26px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--faint);}.cal-grid .cc{height:44px;border:none;padding:0;border-radius:11px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:transparent;}.cal-grid .cc .cn{font-size:12.5px;font-weight:600;color:var(--text);font-family:'JetBrains Mono';}.cal-grid .cc.has{background:#F1F1F7;}.cal-grid .cc .cd{width:6px;height:6px;border-radius:50%;}.cal-grid .cc .cd.moon{width:auto;height:auto;font-size:9px;background:none;}.cal-grid .cc.today{box-shadow:inset 0 0 0 2px var(--section);}.cal-grid .cc.sel{background:linear-gradient(150deg,var(--section),#ff9a3d);}.cal-grid .cc.sel .cn{color:#fff;}.cal-grid .cc.sel .cd{background:#fff !important;}
   .cal-wd{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:2px;}
   .cal-wd span{text-align:center;font-size:10px;font-weight:700;color:var(--faint);}
   .cal-wl{text-align:center;font-size:10px;font-weight:700;color:var(--faint);padding-bottom:5px;}
@@ -702,7 +702,7 @@ function toggleCat(b){
 
 /* ---------- PROGRESS ---------- */
 function lastTrainedDays(key){var best=null;for(var d in hist){if(hist[d]&&hist[d][key]>0){if(!best||d>best)best=d;}}if(!best)return null;var t=new Date(best+'T12:00:00Z').getTime();var today=new Date(todayStr()+'T12:00:00Z').getTime();return Math.round((today-t)/86400000);}
-const BUILD='16';
+const BUILD='17';
 function renderProgress(){
   setSection('#FF6A4D');
   const st=streakCount();
@@ -718,7 +718,7 @@ function renderProgress(){
   document.getElementById('progBody').innerHTML=`
     <div class="streak-hero"><div class="flame">🔥</div><div class="big">${st}</div><div class="lbl">day streak</div><div class="msg">${msg}</div></div>
     <div class="wk-strip"><div class="wk-item"><b>${wcount}</b><span>workout${wcount===1?'':'s'} this week</span></div><div class="wk-sep"></div><div class="wk-item"><b>${wcount?fmtDur(wtime):'\u2014'}</b><span>time trained</span></div></div>
-    <div class="trk-card cal-card"><div class="cal-head"><button id="calPrev"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button><h5 id="calTitle"></h5><button id="calNext"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button></div><div class="cal-wd"><span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span></div><div class="cal-grid" id="calGrid"></div></div>
+    <div class="trk-card cal-card"><div class="cal-head"><button id="calPrev"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button><h5 id="calTitle"></h5><button id="calNext"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button></div><div class="cal-grid" id="calGrid"></div></div>
     <div id="dayDetail"></div>
     <div class="trk-card"><h5>Muscle balance <small>time since trained</small></h5>${balRows}</div>
     <div class="build-tag">The Rack \u00b7 build ${BUILD}</div>`;
@@ -858,20 +858,21 @@ function renderCalendar(){
   const y=calMonth.getUTCFullYear(),m=calMonth.getUTCMonth();
   document.getElementById('calTitle').textContent=calMonth.toLocaleDateString(undefined,{month:'long',year:'numeric',timeZone:'UTC'});
   const first=new Date(Date.UTC(y,m,1)).getUTCDay(),days=new Date(Date.UTC(y,m+1,0)).getUTCDate();
-  let cells='';
-  for(let i=0;i<first;i++)cells+='<div class="cal-cell empty"></div>';
   const today=todayStr();
+  const wl=['S','M','T','W','T','F','S'];
+  let cells=wl.map(w=>'<div class="cw">'+w+'</div>').join('');
   for(let dd=1;dd<=days;dd++){
     const key=y+'-'+String(m+1).padStart(2,'0')+'-'+String(dd).padStart(2,'0');
-    const tot=dayTotal(hist[key]),isRest=!!rest[key];let cls='cal-cell',dot='';
-    if(tot>0){const sec=primarySection(key);cls+=' has';dot='<span class="cal-dot" style="background:'+(HUES[sec]||'#FF6A4D')+'"></span>';}
-    else if(isRest){cls+=' rest';dot='<span class="cal-dot moon">🌙</span>';}
+    const tot=dayTotal(hist[key]),isRest=!!rest[key];let cls='cc',dot='';
+    if(tot>0){const sec=primarySection(key);cls+=' has';dot='<i class="cd" style="background:'+(HUES[sec]||'#FF6A4D')+'"></i>';}
+    else if(isRest){cls+=' rest';dot='<i class="cd moon">🌙</i>';}
     if(key===today)cls+=' today';
     if(key===calSelected)cls+=' sel';
-    cells+='<button class="'+cls+'" data-day="'+key+'"><span class="cal-num">'+dd+'</span>'+dot+'</button>';
+    const gc=dd===1?(' style="grid-column:'+(first+1)+'"'):'';
+    cells+='<button class="'+cls+'" data-day="'+key+'"'+gc+'><span class="cn">'+dd+'</span>'+dot+'</button>';
   }
-  document.getElementById('calGrid').innerHTML=cells;
-  document.querySelectorAll('#calGrid .cal-cell[data-day]').forEach(b=>b.onclick=()=>{calSelected=b.dataset.day;renderCalendar();renderDayDetail();});
+  const g=document.getElementById('calGrid'); g.innerHTML=cells;
+  g.querySelectorAll('.cc[data-day]').forEach(b=>b.onclick=()=>{calSelected=b.dataset.day;renderCalendar();renderDayDetail();});
 }
 function renderDayDetail(){
   const el=document.getElementById('dayDetail');if(!el)return;const key=calSelected;
