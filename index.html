@@ -453,7 +453,7 @@
   .lt-when.lt-stale{color:#F59E0B;}
   .lt-when.lt-never{color:var(--faint);font-weight:600;}
   .build-tag{text-align:center;font-size:10px;color:var(--faint);padding:16px 0 6px;letter-spacing:.06em;}
-  .tag.flow{font-weight:800;letter-spacing:.05em;font-size:10px;}  .tag.flow.warm{background:#FEF3C7;color:#B45309;}  .tag.flow.cool{background:#DCFCE7;color:#15803D;}  .hbtn{background:var(--section);color:#fff;font-weight:700;font-size:13px;padding:10px 18px;border-radius:22px;min-width:118px;}  .hbtn.run{background:#111;font-family:'JetBrains Mono';font-size:16px;}  .hbtn:active{transform:scale(.97);}</style>
+  .tag.flow{font-weight:800;letter-spacing:.05em;font-size:10px;}  .tag.flow.warm{background:#FEF3C7;color:#B45309;}  .tag.flow.cool{background:#DCFCE7;color:#15803D;}  .hbtn{background:var(--section);color:#fff;font-weight:700;font-size:13px;padding:10px 18px;border-radius:22px;min-width:118px;}  .hbtn.run{background:#111;font-family:'JetBrains Mono';font-size:16px;}  .hbtn:active{transform:scale(.97);}  .flow-row{display:flex;gap:9px;margin-top:11px;}  .flow-chip{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:12px 8px;border-radius:16px;background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.45);box-shadow:inset 0 1px 0 rgba(255,255,255,.5);}  .flow-chip:active{background:rgba(255,255,255,.4);}  .flow-chip .fc-ic{font-size:17px;}  .flow-chip .fc-t{font-size:13px;font-weight:800;color:#fff;}  .flow-chip .fc-s{font-size:10px;color:rgba(255,255,255,.85);}</style>
 </head>
 <body>
 <div class="bgfx"></div>
@@ -647,6 +647,7 @@ function sessionHTML(key){
     '<div class="sess-content"><div class="sess-eyebrow">Today’s session</div><div class="sess-name">'+d.name+'</div><div class="sess-meta">'+total+' exercise'+(total===1?'':'s')+' · ~'+estMin(key)+' min</div><div class="sess-focus">'+d.focus+'</div>'+
     '<div class="sess-prog"><i style="width:'+pct+'%"></i></div><div class="sess-prog-txt">'+done+' of '+total+' done</div>'+
     '<button class="sess-start" id="startBtn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>'+(done?'Continue':'Start')+' workout</button>'+
+    '<div class="flow-row"><button class="flow-chip warm" id="warmBtn"><span class="fc-ic">🔥</span><span class="fc-t">Warm-up</span><span class="fc-s">'+flowMin('warm',key)+' min · '+(WARM[key]||[]).length+' moves</span></button><button class="flow-chip cool" id="coolBtn"><span class="fc-ic">🧘</span><span class="fc-t">Cool-down</span><span class="fc-s">'+flowMin('cool',key)+' min · '+(COOL[key]||[]).length+' stretches</span></button></div>'+
     '<div class="sess-sub"><button id="reorderBtn">↕ Reorder</button><button id="editBtn">＋ Add / edit</button></div></div></div>'+
     '<div class="mini-list">'+rowsHTML+'</div>';
 }
@@ -655,6 +656,8 @@ function wireSession(key){
   document.getElementById('startBtn').onclick=()=>openDeck(key,firstUndone(key),true);
   document.getElementById('reorderBtn').onclick=()=>openReorder(key);
   document.getElementById('editBtn').onclick=()=>{libSection=key;showTab('library');};
+  const wb=document.getElementById('warmBtn');if(wb)wb.onclick=()=>openFlow('warm',key);
+  const cb=document.getElementById('coolBtn');if(cb)cb.onclick=()=>openFlow('cool',key);
   wireSwipe(key);
 }
 function firstUndone(key){const ids=workout[key]||[],st=session[key]||{};let i=ids.findIndex(id=>st[id]!=='done');return i<0?0:i;}
@@ -702,7 +705,7 @@ function toggleCat(b){
 
 /* ---------- PROGRESS ---------- */
 function lastTrainedDays(key){var best=null;for(var d in hist){if(hist[d]&&hist[d][key]>0){if(!best||d>best)best=d;}}if(!best)return null;var t=new Date(best+'T12:00:00Z').getTime();var today=new Date(todayStr()+'T12:00:00Z').getTime();return Math.round((today-t)/86400000);}
-const BUILD='18';
+const BUILD='19';
 function renderProgress(){
   setSection('#FF6A4D');
   const st=streakCount();
@@ -743,8 +746,14 @@ function steps(ex){const t=ex.h||'';return t.split(/(?<=[.!?])\s+/).map(s=>s.tri
 const WARM={push:['0630','3636','1167'],pull:['0630','3636','1405'],legs:['0630','3636','1604'],arms:['0630','3636','1167'],upper:['0630','3636','1167']};
 const COOL={push:['1271','0643','0669'],pull:['1346','1365','0690'],legs:['1511','1512','1377','1424'],arms:['0643','0669','0721'],upper:['1271','1346','0643']};
 const HOLD={warm:45,cool:30};
-let useFlows=load('rack_flows')!==0;
-function buildList(){const main=(workout[curDay]||[]).filter(id=>DB[id]).map(id=>{const p=getPres(curDay,id);return {id,sets:p.sets,reps:p.reps,inPlan:PLANSET[curDay].has(id)};});if(!useFlows||!main.length)return main;const w=(WARM[curDay]||[]).filter(id=>DB[id]).map(id=>({id,sets:null,reps:'Warm up',flow:'warm',hold:HOLD.warm}));const c=(COOL[curDay]||[]).filter(id=>DB[id]).map(id=>({id,sets:null,reps:'Hold both sides',flow:'cool',hold:HOLD.cool}));return w.concat(main,c);}
+let useFlows=load('rack_flows')!==0,flowMode=null;
+const FLOWSET={warm:WARM,cool:COOL};
+function flowMin(mode,key){const n=(FLOWSET[mode][key]||[]).length;return Math.max(1,Math.round(n*(mode==='warm'?45:60)/60));}
+function openFlow(mode,key){flowMode=mode;curDay=key;setSection(HUES[key]);
+  document.getElementById('deckTitle').textContent=(mode==='warm'?'Warm-up':'Cool-down');
+  renderDeck();document.getElementById('deck').style.display='flex';
+  requestAnimationFrame(()=>{scrollToCard(0,false);onScrollSettle();});}
+function buildList(){if(flowMode)return (FLOWSET[flowMode][curDay]||[]).filter(id=>DB[id]).map(id=>({id,sets:null,reps:flowMode==='warm'?'Warm up':'Hold both sides',flow:flowMode,hold:HOLD[flowMode]}));return (workout[curDay]||[]).filter(id=>DB[id]).map(id=>{const p=getPres(curDay,id);return {id,sets:p.sets,reps:p.reps,inPlan:PLANSET[curDay].has(id)};});}
 function openDeck(key,start,begin){
   curDay=key;setSection(HUES[key]);todayView=key;if(begin)logStart(key);
   document.getElementById('deckTitle').textContent=DAYS.find(d=>d.key===key).name;
@@ -752,7 +761,7 @@ function openDeck(key,start,begin){
   requestAnimationFrame(()=>{scrollToCard(start||0,false);onScrollSettle();});
   if(!load('rack_hint_seen')&&deckList.length>1){const h=document.getElementById('hint');h.style.display='flex';setTimeout(()=>h.style.display='none',3600);save('rack_hint_seen',1);}
 }
-function closeDeck(){logTouch(curDay);document.getElementById('deck').style.display='none';renderTodayView();}
+function closeDeck(){flowMode=null;logTouch(curDay);document.getElementById('deck').style.display='none';renderTodayView();}
 function cardHTML(it,i,total){
   const ex=DB[it.id],cardio=it.sets==null,fl=it.flow;
   const pb=cardio?`<div><div class="big">${it.reps}</div><div class="lbl">Cardio</div></div>`:`<div><div class="big">${it.sets} × ${it.reps}</div><div class="lbl">Sets × reps</div></div>`;
@@ -782,7 +791,7 @@ function renderDeck(){
 }
 function buildDots(){const n=deckList.length,dots=document.getElementById('dots'),bar=document.getElementById('navbar2');if(n<=12){dots.style.display='flex';bar.style.display='none';dots.innerHTML=deckList.map((it,i)=>`<i data-d="${i}"></i>`).join('');}else{dots.style.display='none';bar.style.display='block';}}
 function updateDots(){const st=session[curDay]||{},idx=currentIndex();document.querySelectorAll('#dots i').forEach((el,i)=>{el.classList.toggle('done',st[deckList[i]?.id]==='done');el.classList.toggle('cur',i===idx);});if(document.getElementById('navbar2').style.display!=='none'){const done=deckList.filter(x=>st[x.id]==='done').length;document.querySelector('#navbar2 i').style.width=(done/deckList.length*100)+'%';}document.getElementById('counter').textContent=`${Math.min(idx+1,deckList.length)} / ${deckList.length}`;document.getElementById('arrPrev').disabled=idx<=0;document.getElementById('arrNext').disabled=idx>=deckList.length-1;}
-function updateSub(){const ids=workout[curDay]||[],st=session[curDay]||{},done=ids.filter(id=>st[id]==='done').length;const nf=deckList.filter(x=>x.flow).length;document.getElementById('deckSub').textContent=`${done} done · ${ids.length} exercises`+(nf?` · +${nf} stretches`:'');}
+function updateSub(){const ids=workout[curDay]||[],st=session[curDay]||{},done=ids.filter(id=>st[id]==='done').length;if(flowMode){document.getElementById('deckSub').textContent=deckList.length+(flowMode==='warm'?' warm-up moves':' stretches');return;}document.getElementById('deckSub').textContent=`${done} done · ${ids.length} exercises`;}
 function hydrate(i){if(i<0||i>=slots.length||hydrated.has(i))return;const slot=slots[i],it=deckList[i];slot.classList.remove('skel');slot.innerHTML=cardHTML(it,i,deckList.length);const st=session[curDay]||{};slot.classList.toggle('s-done',st[it.id]==='done');slot.classList.toggle('s-doing',st[it.id]==='doing');slot.querySelector('[data-edit]').onclick=()=>openEdit(curDay,it.id);slot.querySelector('[data-remove]').onclick=()=>removeFromWorkout(it.id);hydrated.add(i);}
 function dehydrate(i){if(!hydrated.has(i))return;const slot=slots[i];slot.innerHTML='';slot.classList.remove('s-done','s-doing');slot.classList.add('skel');if(activeGifIdx===i)activeGifIdx=-1;hydrated.delete(i);}
 function hydrateAround(idx){const W=2;for(let i=idx-W;i<=idx+W;i++)hydrate(i);[...hydrated].forEach(i=>{if(i<idx-W-1||i>idx+W+1)dehydrate(i);});}
