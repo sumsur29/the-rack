@@ -705,7 +705,7 @@ function toggleCat(b){
 
 /* ---------- PROGRESS ---------- */
 function lastTrainedDays(key){var best=null;for(var d in hist){if(hist[d]&&hist[d][key]>0){if(!best||d>best)best=d;}}if(!best)return null;var t=new Date(best+'T12:00:00Z').getTime();var today=new Date(todayStr()+'T12:00:00Z').getTime();return Math.round((today-t)/86400000);}
-const BUILD='21';
+const BUILD='22';
 function renderProgress(){
   setSection('#FF6A4D');
   const st=streakCount();
@@ -743,7 +743,7 @@ function showTab(tab){
 
 /* ---------- DECK ---------- */
 function steps(ex){const t=ex.h||'';return t.split(/(?<=[.!?])\s+/).map(s=>s.trim()).filter(s=>s.length>1);}
-const WARM={push:['0630','3636','1167'],pull:['0630','3636','1405'],legs:['0630','3636','1604'],arms:['0630','3636','1167'],upper:['0630','3636','1167']};
+const WARM={push:['0630','1167','0662'],pull:['0630','0688','3162'],legs:['3636','1604','1686'],arms:['0630','1428','1167'],upper:['0630','1167','0688']};
 const COOL={push:['1271','0643','0669'],pull:['1346','1365','0690'],legs:['1511','1512','1377','1424'],arms:['0643','0669','0721'],upper:['1271','1346','0643']};
 const HOLD={warm:45,cool:30};
 let useFlows=load('rack_flows')!==0,flowMode=null;
