@@ -453,7 +453,7 @@
   .lt-when.lt-stale{color:#F59E0B;}
   .lt-when.lt-never{color:var(--faint);font-weight:600;}
   .build-tag{text-align:center;font-size:10px;color:var(--faint);padding:16px 0 6px;letter-spacing:.06em;}
-</style>
+  .tag.flow{font-weight:800;letter-spacing:.05em;font-size:10px;}  .tag.flow.warm{background:#FEF3C7;color:#B45309;}  .tag.flow.cool{background:#DCFCE7;color:#15803D;}  .hbtn{background:var(--section);color:#fff;font-weight:700;font-size:13px;padding:10px 18px;border-radius:22px;min-width:118px;}  .hbtn.run{background:#111;font-family:'JetBrains Mono';font-size:16px;}  .hbtn:active{transform:scale(.97);}</style>
 </head>
 <body>
 <div class="bgfx"></div>
@@ -517,7 +517,7 @@
   <div class="dtop"><button class="icon-btn" id="hrBack"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button><div class="dtitle"><div class="t">Heart rate</div><div class="s" id="hrSub"></div></div><button class="icon-btn" id="hrSettings"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 8 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H2a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 3.6 8a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 8 3.6a1.65 1.65 0 0 0 1-1.51V2a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 20.4 8a1.65 1.65 0 0 0 1.51 1H22a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
   <div class="hr-body" id="hrBody"></div>
 </div>
-<div class="modal" id="setModal"><div class="modal-box"><h4>Settings</h4><div class="set-field"><label>Your name</label><input id="setName" placeholder="Name" autocapitalize="words"></div><div class="set-field"><label>Pulse endpoint URL</label><input id="setUrl" placeholder="https://prana-flame.vercel.app"></div><div class="set-field"><label>Access key</label><input id="setKey" placeholder="your Pulse access key"></div><div class="set-field"><label>Max heart rate (bpm)</label><input id="setMax" inputmode="numeric" placeholder="185"></div><p style="font-size:11.5px;color:var(--faint);margin:2px 0 16px;line-height:1.5;">The Rack pulls your workout heart rate from your Pulse app afterward. Leave blank to preview with sample data.</p><div class="modal-btns"><button class="cancel" id="setCancel">Cancel</button><button class="save" id="setSave">Save</button></div></div></div>
+<div class="modal" id="setModal"><div class="modal-box"><h4>Settings</h4><div class="set-field"><label>Your name</label><input id="setName" placeholder="Name" autocapitalize="words"></div><div class="set-field"><label>Warm-up &amp; cool-down</label><select id="setFlows"><option value="1">On — added to every workout</option><option value="0">Off</option></select></div><div class="set-field"><label>Pulse endpoint URL</label><input id="setUrl" placeholder="https://prana-flame.vercel.app"></div><div class="set-field"><label>Access key</label><input id="setKey" placeholder="your Pulse access key"></div><div class="set-field"><label>Max heart rate (bpm)</label><input id="setMax" inputmode="numeric" placeholder="185"></div><p style="font-size:11.5px;color:var(--faint);margin:2px 0 16px;line-height:1.5;">The Rack pulls your workout heart rate from your Pulse app afterward. Leave blank to preview with sample data.</p><div class="modal-btns"><button class="cancel" id="setCancel">Cancel</button><button class="save" id="setSave">Save</button></div></div></div>
 <div class="toast" id="toast"></div>
 <div class="confetti" id="confetti"></div>
 
@@ -702,7 +702,7 @@ function toggleCat(b){
 
 /* ---------- PROGRESS ---------- */
 function lastTrainedDays(key){var best=null;for(var d in hist){if(hist[d]&&hist[d][key]>0){if(!best||d>best)best=d;}}if(!best)return null;var t=new Date(best+'T12:00:00Z').getTime();var today=new Date(todayStr()+'T12:00:00Z').getTime();return Math.round((today-t)/86400000);}
-const BUILD='17';
+const BUILD='18';
 function renderProgress(){
   setSection('#FF6A4D');
   const st=streakCount();
@@ -740,7 +740,11 @@ function showTab(tab){
 
 /* ---------- DECK ---------- */
 function steps(ex){const t=ex.h||'';return t.split(/(?<=[.!?])\s+/).map(s=>s.trim()).filter(s=>s.length>1);}
-function buildList(){return (workout[curDay]||[]).filter(id=>DB[id]).map(id=>{const p=getPres(curDay,id);return {id,sets:p.sets,reps:p.reps,inPlan:PLANSET[curDay].has(id)};});}
+const WARM={push:['0630','3636','1167'],pull:['0630','3636','1405'],legs:['0630','3636','1604'],arms:['0630','3636','1167'],upper:['0630','3636','1167']};
+const COOL={push:['1271','0643','0669'],pull:['1346','1365','0690'],legs:['1511','1512','1377','1424'],arms:['0643','0669','0721'],upper:['1271','1346','0643']};
+const HOLD={warm:45,cool:30};
+let useFlows=load('rack_flows')!==0;
+function buildList(){const main=(workout[curDay]||[]).filter(id=>DB[id]).map(id=>{const p=getPres(curDay,id);return {id,sets:p.sets,reps:p.reps,inPlan:PLANSET[curDay].has(id)};});if(!useFlows||!main.length)return main;const w=(WARM[curDay]||[]).filter(id=>DB[id]).map(id=>({id,sets:null,reps:'Warm up',flow:'warm',hold:HOLD.warm}));const c=(COOL[curDay]||[]).filter(id=>DB[id]).map(id=>({id,sets:null,reps:'Hold both sides',flow:'cool',hold:HOLD.cool}));return w.concat(main,c);}
 function openDeck(key,start,begin){
   curDay=key;setSection(HUES[key]);todayView=key;if(begin)logStart(key);
   document.getElementById('deckTitle').textContent=DAYS.find(d=>d.key===key).name;
@@ -750,15 +754,23 @@ function openDeck(key,start,begin){
 }
 function closeDeck(){logTouch(curDay);document.getElementById('deck').style.display='none';renderTodayView();}
 function cardHTML(it,i,total){
-  const ex=DB[it.id],cardio=it.sets==null;
+  const ex=DB[it.id],cardio=it.sets==null,fl=it.flow;
   const pb=cardio?`<div><div class="big">${it.reps}</div><div class="lbl">Cardio</div></div>`:`<div><div class="big">${it.sets} × ${it.reps}</div><div class="lbl">Sets × reps</div></div>`;
   const sec=(ex.s||[]).slice(0,2).map(m=>`<span class="tag">${m}</span>`).join('');
   const sh=steps(ex).map(s=>`<li>${s}</li>`).join('');
   return `<div class="media"><img loading="lazy" data-jpg="${imgURL(ex)}" data-gif="${gifURL(ex)}" src="${imgURL(ex)}" data-fb="${fbURL(ex)}" data-final="ph" onerror="imgErr(this)"><div class="ph" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5l11 11"/><path d="M3.8 8.3l2-2M8.3 3.8l-2 2"/><path d="M20.2 15.7l-2 2M15.7 20.2l2-2"/><path d="M4.7 9.2 2.9 11a2 2 0 0 0 0 2.8l1.3 1.3a2 2 0 0 0 2.8 0l1.8-1.8"/><path d="M19.3 14.8l1.8-1.8a2 2 0 0 0 0-2.8l-1.3-1.3a2 2 0 0 0-2.8 0L15 10.7"/></svg>No preview</div><span class="idx mono">${i+1}/${total}</span><span class="stamp done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Done</span><span class="stamp doing"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Doing</span></div>
-    <div class="ex-name">${ex.n}</div><div class="ex-tags">${it.inPlan?'<span class="tag plan">★ In plan</span>':''}<span class="tag tgt">${ex.t}</span><span class="tag">${ex.q}</span>${sec}</div>
-    <div class="pres ${cardio?'cardio':''}">${pb}<button class="edit" data-edit="${it.id}">Edit</button></div>
+    <div class="ex-name">${ex.n}</div><div class="ex-tags">${fl?`<span class="tag flow ${fl}">${fl==='warm'?'WARM-UP':'COOL-DOWN'}</span>`:''}${it.inPlan?'<span class="tag plan">★ In plan</span>':''}<span class="tag tgt">${ex.t}</span><span class="tag">${ex.q}</span>${sec}</div>
+    <div class="pres ${cardio?'cardio':''}">${pb}${fl?`<button class="hbtn" data-hold="${it.hold}">Start ${it.hold}s hold</button>`:`<button class="edit" data-edit="${it.id}">Edit</button>`}</div>
     <details class="how"><summary>How to perform <span class="chev"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span></summary><ol>${sh}</ol></details>
-    <button class="remove" data-remove="${it.id}">Remove from ${DAYS.find(d=>d.key===curDay).name}</button>`;
+    ${fl?'':`<button class="remove" data-remove="${it.id}">Remove from ${DAYS.find(d=>d.key===curDay).name}</button>`}`;
+}
+function nextCard(){const i=currentIndex();if(i<deckList.length-1)scrollToCard(i+1,true);}
+function startHold(btn){
+  if(btn._iv){clearInterval(btn._iv);btn._iv=null;btn.textContent='Resume';return;}
+  let t=btn._left!=null?btn._left:parseInt(btn.dataset.hold,10);
+  btn.classList.add('run');
+  const tick=()=>{t--;btn._left=t;btn.textContent=t+'s';if(t<=0){clearInterval(btn._iv);btn._iv=null;btn._left=null;btn.classList.remove('run');btn.textContent='Done ✓';try{navigator.vibrate&&navigator.vibrate(200);}catch(e){}setTimeout(nextCard,700);}};
+  btn.textContent=t+'s';btn._iv=setInterval(tick,1000);
 }
 function renderDeck(){
   deckList=buildList();hydrated=new Set();activeGifIdx=-1;
@@ -766,11 +778,11 @@ function renderDeck(){
   if(!deckList.length){track.innerHTML='';track.style.display='none';empty.style.display='flex';document.getElementById('navrow').style.display='none';document.getElementById('actions').style.display='none';return;}
   track.style.display='flex';empty.style.display='none';document.getElementById('navrow').style.display='flex';document.getElementById('actions').style.display='flex';
   track.innerHTML=deckList.map((it,i)=>`<div class="card skel" data-i="${i}" data-id="${it.id}"></div>`).join('');
-  slots=[...track.querySelectorAll('.card')];buildDots();updateSub();
+  slots=[...track.querySelectorAll('.card')];buildDots();updateSub();track.addEventListener('click',e=>{const b=e.target.closest('[data-hold]');if(b){e.stopPropagation();startHold(b);}});
 }
 function buildDots(){const n=deckList.length,dots=document.getElementById('dots'),bar=document.getElementById('navbar2');if(n<=12){dots.style.display='flex';bar.style.display='none';dots.innerHTML=deckList.map((it,i)=>`<i data-d="${i}"></i>`).join('');}else{dots.style.display='none';bar.style.display='block';}}
 function updateDots(){const st=session[curDay]||{},idx=currentIndex();document.querySelectorAll('#dots i').forEach((el,i)=>{el.classList.toggle('done',st[deckList[i]?.id]==='done');el.classList.toggle('cur',i===idx);});if(document.getElementById('navbar2').style.display!=='none'){const done=deckList.filter(x=>st[x.id]==='done').length;document.querySelector('#navbar2 i').style.width=(done/deckList.length*100)+'%';}document.getElementById('counter').textContent=`${Math.min(idx+1,deckList.length)} / ${deckList.length}`;document.getElementById('arrPrev').disabled=idx<=0;document.getElementById('arrNext').disabled=idx>=deckList.length-1;}
-function updateSub(){const ids=workout[curDay]||[],st=session[curDay]||{},done=ids.filter(id=>st[id]==='done').length;document.getElementById('deckSub').textContent=`${done} done · ${ids.length} exercises`;}
+function updateSub(){const ids=workout[curDay]||[],st=session[curDay]||{},done=ids.filter(id=>st[id]==='done').length;const nf=deckList.filter(x=>x.flow).length;document.getElementById('deckSub').textContent=`${done} done · ${ids.length} exercises`+(nf?` · +${nf} stretches`:'');}
 function hydrate(i){if(i<0||i>=slots.length||hydrated.has(i))return;const slot=slots[i],it=deckList[i];slot.classList.remove('skel');slot.innerHTML=cardHTML(it,i,deckList.length);const st=session[curDay]||{};slot.classList.toggle('s-done',st[it.id]==='done');slot.classList.toggle('s-doing',st[it.id]==='doing');slot.querySelector('[data-edit]').onclick=()=>openEdit(curDay,it.id);slot.querySelector('[data-remove]').onclick=()=>removeFromWorkout(it.id);hydrated.add(i);}
 function dehydrate(i){if(!hydrated.has(i))return;const slot=slots[i];slot.innerHTML='';slot.classList.remove('s-done','s-doing');slot.classList.add('skel');if(activeGifIdx===i)activeGifIdx=-1;hydrated.delete(i);}
 function hydrateAround(idx){const W=2;for(let i=idx-W;i<=idx+W;i++)hydrate(i);[...hydrated].forEach(i=>{if(i<idx-W-1||i>idx+W+1)dehydrate(i);});}
@@ -782,7 +794,7 @@ function scrollToCard(i,smooth){i=Math.max(0,Math.min(i,deckList.length-1));docu
 function onScrollSettle(){const idx=currentIndex();hydrateAround(idx);setActiveGif(idx);updateActions();updateDots();}
 function updateActions(){const it=currentItem(),st=session[curDay]||{},acts=document.getElementById('actions');if(!it){acts.style.visibility='hidden';return;}acts.style.visibility='visible';document.getElementById('btnDoing').classList.toggle('on',st[it.id]==='doing');const done=document.getElementById('btnDone');done.classList.toggle('is-done',st[it.id]==='done');done.querySelector('span').textContent=st[it.id]==='done'?'Done ✓':'Mark done';}
 function setStatus(kind){
-  const it=currentItem();if(!it)return;if(!session[curDay])session[curDay]={};
+  const it=currentItem();if(!it)return;if(it.flow){toast(it.flow==='warm'?'Warm-up done':'Nice stretch');nextCard();return;}if(!session[curDay])session[curDay]={};
   const s=session[curDay],cur=s[it.id];
   if(kind==='doing'){Object.keys(s).forEach(k=>{if(s[k]==='doing')delete s[k];});if(cur!=='doing')s[it.id]='doing';}else{if(cur==='done')delete s[it.id];else s[it.id]='done';}
   persistS();const i=currentIndex(),slot=slots[i];if(slot&&hydrated.has(i)){slot.classList.toggle('s-done',s[it.id]==='done');slot.classList.toggle('s-doing',s[it.id]==='doing');}
@@ -848,9 +860,9 @@ function renderHR(d,start,end,preview){
     <div class="hr-card"><h5>Time in zones</h5>${zoneRows}</div>
     ${preview?'<div class="hr-note">Sample data. Connect your Pulse app in settings to pull your real Fitbit heart rate after each workout.</div>':(d.cached?'<div class="hr-note">Loaded instantly from cache · <button class="hr-refresh" onclick="refreshHR()">refresh</button></div>':'<div class="hr-note">Pulled from your Fitbit via Pulse · zones based on a '+maxHR+' bpm max</div>')}`;
 }
-function openSettings(){document.getElementById('setName').value=userName||'';document.getElementById('setUrl').value=hrCfg.url||'';document.getElementById('setKey').value=hrCfg.key||'';document.getElementById('setMax').value=hrCfg.maxHR||185;document.getElementById('setModal').classList.add('show');}
+function openSettings(){document.getElementById('setName').value=userName||'';document.getElementById('setFlows').value=useFlows?'1':'0';document.getElementById('setUrl').value=hrCfg.url||'';document.getElementById('setKey').value=hrCfg.key||'';document.getElementById('setMax').value=hrCfg.maxHR||185;document.getElementById('setModal').classList.add('show');}
 function closeSettings(){document.getElementById('setModal').classList.remove('show');}
-function saveSettings(){userName=document.getElementById('setName').value.trim();save('rack_name',userName);hrCfg.url=document.getElementById('setUrl').value.trim();hrCfg.key=document.getElementById('setKey').value.trim();hrCfg.maxHR=parseInt(document.getElementById('setMax').value)||185;persistHr();closeSettings();renderTodayView();toast('Saved');}
+function saveSettings(){userName=document.getElementById('setName').value.trim();save('rack_name',userName);useFlows=document.getElementById('setFlows').value==='1';save('rack_flows',useFlows?1:0);hrCfg.url=document.getElementById('setUrl').value.trim();hrCfg.key=document.getElementById('setKey').value.trim();hrCfg.maxHR=parseInt(document.getElementById('setMax').value)||185;persistHr();closeSettings();renderTodayView();toast('Saved');}
 function showOnboard(){const o=document.getElementById('onboard');o.style.display='flex';setTimeout(()=>{const i=document.getElementById('obName');if(i)i.focus();},120);}
 function fmtTime(ms){return new Date(ms).toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'});}
 function primarySection(key){const hh=hist[key];if(!hh)return null;let best=null,bv=-1;for(const k in hh){if(hh[k]>bv){bv=hh[k];best=k;}}return best;}
