@@ -596,7 +596,7 @@ function persistS(){save('rack_session_v3',{date:todayStr(),data:session});}
 function persistTP(){save('rack_todayplan_v1',todayPlan);}
 function persistR(){save('rack_rest_v1',rest);}
 function saveHist(){save('rack_hist_v1',hist);}
-function getPres(k,id){return (pres[k]&&pres[k][id])||PLANPRES[k][id]||{sets:3,reps:'12'};}
+function getPres(k,id){const found=(pres[k]&&pres[k][id])||(PLANPRES[k]&&PLANPRES[k][id]);if(found)return found;const ex=DB[id];if(ex&&ex.b==='cardio')return {sets:null,reps:'30–60 sec'};return {sets:3,reps:'12'};}
 function getTodayKey(){const tp=todayPlan[todayStr()];if(tp==='rest')return null;if(tp&&DAYS.find(d=>d.key===tp))return tp;return null;}
 
 /* history / streak */
@@ -714,7 +714,7 @@ function toggleCat(b){
 
 /* ---------- PROGRESS ---------- */
 function lastTrainedDays(key){var best=null;for(var d in hist){if(hist[d]&&hist[d][key]>0){if(!best||d>best)best=d;}}if(!best)return null;var t=new Date(best+'T12:00:00Z').getTime();var today=new Date(todayStr()+'T12:00:00Z').getTime();return Math.round((today-t)/86400000);}
-const BUILD='34';
+const BUILD='35';
 function renderProgress(){
   setSection('#FF6A4D');
   const st=streakCount();
