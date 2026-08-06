@@ -715,7 +715,7 @@ function toggleCat(b){
 
 /* ---------- PROGRESS ---------- */
 function lastTrainedDays(key){var best=null;for(var d in hist){if(hist[d]&&hist[d][key]>0){if(!best||d>best)best=d;}}if(!best)return null;var t=new Date(best+'T12:00:00Z').getTime();var today=new Date(todayStr()+'T12:00:00Z').getTime();return Math.round((today-t)/86400000);}
-const BUILD='39';
+const BUILD='40';
 function realSessions(){return sessions.filter(s=>s.done>0).sort((a,b)=>a.start-b.start);}
 function sessionCals(s){try{const k='rack_hrc_'+s.start+'_'+(s.end||s.start);const v=localStorage.getItem(k);if(v){const j=JSON.parse(v);if(j&&j.calories)return Math.round(j.calories);}}catch(e){}
   // scan any cached HR window that overlaps this session
@@ -737,7 +737,7 @@ function fmtSince(d){if(!d)return '';return d.toLocaleDateString(undefined,{mont
 function journeyCard(){const j=journeyStats();const st=streakCount();
   const bars=j.recent.map((s,i)=>{const c=j.cals[j.cals.length-j.recent.length+i];return c;});
   const mx=Math.max(1,...bars.filter(x=>x));
-  const barHTML=j.recent.map((s,i)=>{const c=bars[i];const hgt=c?Math.max(8,Math.round(c/mx*100)):8;return '<div class="jb'+(c?'':' jb-none')+'" style="height:'+hgt+'%"></div>';}).join('');
+  const barHTML=j.recent.map((s,i)=>{const c=bars[i];const hgt=c?Math.max(8,Math.round(c/mx*100)):8;return '<span class="jb'+(c?'':' jb-none')+'"'+(c?' data-c="'+c+'"':'')+' style="height:'+hgt+'%"></span>';}).join('');
   const calN=bars.filter(x=>x).length;
   return '<button class="jcard" id="journeyCard">'+
     '<div class="jc-hd"><div class="jc-streak"><span class="jc-fl">\uD83D\uDD25</span><div><div class="jc-sn">'+st+'</div><div class="jc-sl">day streak</div></div></div><span class="jc-ar"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>'+
@@ -770,7 +770,7 @@ function openJourney(){const j=journeyStats();const st=streakCount();
   // calorie chart (all sessions with cal)
   const withCal=j.recent.map((s,i)=>({s,c:j.cals[j.cals.length-j.recent.length+i]}));
   const cMax=Math.max(1,...withCal.map(x=>x.c||0));
-  const calVals=withCal.map(x=>x.c).filter(v=>v);const cMin=calVals.length?Math.min(...calVals):0,cAvg=calVals.length?Math.round(calVals.reduce((a,b)=>a+b,0)/calVals.length):0;const cPeak=Math.max(0,...calVals);const nCal=calVals.length;const chart=withCal.map(x=>{const hpct=x.c?Math.max(6,Math.round(x.c/cMax*100)):6;const isPeak=x.c&&x.c===cPeak&&hpct>=45;return '<div class="jch-b'+(x.c?'':' none')+(isPeak?' peak':'')+'"'+(isPeak?' data-v="'+x.c+'"':'')+' style="height:'+hpct+'%"></div>';}).join('');const avgPct=cMax?Math.round(cAvg/cMax*100):0;
+  const calVals=withCal.map(x=>x.c).filter(v=>v);const cMin=calVals.length?Math.min(...calVals):0,cAvg=calVals.length?Math.round(calVals.reduce((a,b)=>a+b,0)/calVals.length):0;const cPeak=Math.max(0,...calVals);const nCal=calVals.length;const chart=withCal.map(x=>{const hpct=x.c?Math.max(6,Math.round(x.c/cMax*100)):6;return '<span class="jch-b'+(x.c?'':' none')+'"'+(x.c?' data-c="'+x.c+'"':'')+' style="height:'+hpct+'%"></span>';}).join('');const avgPct=cMax?Math.round(cAvg/cMax*100):0;
   const workDays=Math.floor(hrs/8);
   const eps=Math.round(j.totMs/(1000*60*22));
   const shaw=j.calTot?Math.round(j.calTot/600):0;
@@ -779,11 +779,11 @@ function openJourney(){const j=journeyStats();const st=streakCount();
     '<div class="jscreen-hero"><div class="jh-lab">TOTAL TIME TRAINED</div><div class="jh-n">'+fmtDur(j.totMs)+'</div><div class="jh-cap">across '+j.workouts+' workouts'+(j.first?' since '+fmtSince(j.first):'')+'</div>'+(hrs>=8?'<div class="jh-eq">\u23F1 That\u2019s over '+Math.floor(hrs/8)+' full work-day'+(Math.floor(hrs/8)===1?'':'s')+' in the gym</div>':'')+'</div>'+
     '<h5 class="jsec">MILESTONES</h5><div class="jmile">'+badges+'</div>'+
     '<h5 class="jsec">THE BIG NUMBERS</h5><div class="jbig">'+'<div class="jbg"><span class="jbg-glow" style="background:#FF6A4D"></span><span class="jbg-ic" style="background:#FFE8E2"><svg viewBox="0 0 24 24" fill="none" stroke="#FF6A4D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6M8 7v10M16 7v10M20 9v6M8 12h8"/></svg></span><div class="jbg-v">'+j.workouts+'</div><div class="jbg-k">Workouts</div></div>'+'<div class="jbg"><span class="jbg-glow" style="background:#7C5CFC"></span><span class="jbg-ic" style="background:#EDE9FF"><svg viewBox="0 0 24 24" fill="none" stroke="#7C5CFC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v18M18 3v18M6 8h12M6 16h12"/></svg></span><div class="jbg-v">'+j.setsDone.toLocaleString()+'</div><div class="jbg-k">Sets done</div></div>'+'<div class="jbg"><span class="jbg-glow" style="background:#F59E0B"></span><span class="jbg-ic" style="background:#FFF3D6"><svg viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c.5 3 2.5 4 3.9 5.4A6.5 6.5 0 0 1 18 13a6 6 0 0 1-12 0c0-1.6.6-3 1.6-4-.1 1.2.5 2.2 1.4 2.6C9.5 9.6 10.3 6.6 12 3z"/></svg></span><div class="jbg-v">'+st+'</div><div class="jbg-k">Current streak</div></div>'+'<div class="jbg"><span class="jbg-glow" style="background:#E8467C"></span><span class="jbg-ic" style="background:#FFEAF3"><svg viewBox="0 0 24 24" fill="none" stroke="#E8467C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.4L12 17l-6.3 4.4L8 14 2 9.4h7.6z"/></svg></span><div class="jbg-v">'+j.best+'</div><div class="jbg-k">Best streak</div></div>'+'<div class="jbg"><span class="jbg-glow" style="background:#17B890"></span><span class="jbg-ic" style="background:#E4F8F1"><svg viewBox="0 0 24 24" fill="none" stroke="#17B890" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 15.3A8 8 0 1 1 8.7 4 6.5 6.5 0 0 0 20 15.3z"/></svg></span><div class="jbg-v">'+j.restDays+'</div><div class="jbg-k">Rest days</div></div>'+'<div class="jbg"><span class="jbg-glow" style="background:#06B6D4"></span><span class="jbg-ic" style="background:#DEF5FA"><svg viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><div class="jbg-v">'+(j.calTot?'~'+(j.calTot>=1000?(j.calTot/1000).toFixed(1)+'k':j.calTot):'\u2014')+'</div><div class="jbg-k">Calories</div></div>'+'</div>'+
-    (nCal>=3?('<h5 class="jsec">CALORIES</h5><div class="jchart-wrap">'+'<div class="jch-top"><span class="jch-title">per workout</span><span class="jch-range">'+cMin+'–'+cPeak+' cal</span></div>'+'<div class="jchart"><div class="javg" style="bottom:'+Math.min(88,avgPct)+'%"><span class="javg-l">avg '+cAvg+'</span></div><div class="jbars">'+chart+'</div></div>'+'</div>'):(nCal>0?('<h5 class="jsec">CALORIES</h5><div class="jchart-empty">Calorie trend appears once a few more workouts have heart-rate data. '+nCal+' so far.</div>'):''))+
+    (nCal>=1?('<h5 class="jsec">CALORIES <small>tap a bar</small></h5><div class="jchart-wrap">'+'<div class="jchart"><div class="jbars">'+chart+'</div></div>'+'</div>'):'')+
     '<h5 class="jsec">FOR FUN</h5><div class="jfunwrap">'+funHTML+'</div>'+
     (lb?('<h5 class="jsec">MOST TRAINED</h5><div class="jlead">'+lb+'</div>'):'')+
     '<div class="build-tag">The Rack \u00b7 build '+BUILD+'</div>';
-  document.getElementById('journey').style.display='block';document.getElementById('journey').scrollTop=0;}
+  document.getElementById('journey').style.display='block';document.getElementById('journey').scrollTop=0;bindBarTaps();}
 function closeJourney(){document.getElementById('journey').style.display='none';}
 async function autoCacheHR(){
   if(!(hrCfg.url&&hrCfg.key))return;
@@ -794,6 +794,7 @@ async function autoCacheHR(){
   }
   if(did&&document.getElementById('journey')&&document.getElementById('journey').style.display==='block')openJourney();
 }
+function bindBarTaps(){document.querySelectorAll('.jbars .jch-b[data-c],.jc-bars .jb[data-c]').forEach(b=>{b.onclick=e=>{e.stopPropagation();const v=b.getAttribute('data-c');document.querySelectorAll('.bar-pop').forEach(p=>p.remove());const pop=document.createElement('span');pop.className='bar-pop';pop.textContent=v+' cal';b.appendChild(pop);setTimeout(()=>pop.classList.add('show'),10);setTimeout(()=>{pop.classList.remove('show');setTimeout(()=>pop.remove(),200);},1600);};});}
 function renderProgress(){
   setSection('#FF6A4D');
   const st=streakCount();
@@ -816,6 +817,7 @@ function renderProgress(){
   document.getElementById('calNext').onclick=()=>{calMonth=new Date(Date.UTC(calMonth.getUTCFullYear(),calMonth.getUTCMonth()+1,1));renderCalendar();};
   renderCalendar();renderDayDetail();
   const _jc=document.getElementById('journeyCard');if(_jc)_jc.onclick=openJourney;
+  bindBarTaps();
 }
 
 /* ---------- NAV ---------- */
