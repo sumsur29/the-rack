@@ -1176,5 +1176,39 @@ function wire(){
 }
 init();
 </script>
+<!-- PULSE SYNC (added) — pushes a daily activity summary to Pulse. Reads localStorage only. -->
+<script>
+(function () {
+  function readJSON(k){ try{return JSON.parse(localStorage.getItem(k));}catch(e){return null;} }
+  function cfg(){ return readJSON('rack_hr_cfg') || {}; }
+  function buildDays(){
+    var hist = readJSON('rack_hist_v1') || {}, out = [];
+    for (var d in hist){
+      if(!/^\d{4}-\d{2}-\d{2}$/.test(d)) continue;
+      var day = hist[d]||{}, sets = 0;
+      for (var ex in day){ var v=day[ex]; if(typeof v==='number' && v>0) sets+=v; }
+      if(sets>0) out.push({date:d, sets:sets, sessions:1});
+    }
+    out.sort(function(a,b){return a.date<b.date?1:-1;});
+    return out.slice(0,70);
+  }
+  var lastPayload='';
+  function sync(){
+    var c=cfg(), base=(c.url||'').replace(/\/+$/,'');
+    if(!base || !c.syncEmail || !c.syncKey) return;
+    var days=buildDays(); if(!days.length) return;
+    var body=JSON.stringify({key:c.syncKey, email:c.syncEmail, days:days});
+    if(body===lastPayload) return;
+    fetch(base+'/api/rack/sync',{method:'POST',headers:{'Content-Type':'application/json'},body:body,keepalive:true})
+      .then(function(r){return r.json();})
+      .then(function(j){ if(j&&j.ok){ lastPayload=body; if(window.console) console.log('[pulse sync]',j.saved,'days'); } })
+      .catch(function(e){ if(window.console) console.warn('[pulse sync] failed',e); });
+  }
+  setTimeout(sync,4000);
+  document.addEventListener('visibilitychange',function(){ if(document.visibilityState==='hidden') sync(); });
+  setInterval(sync,5*60*1000);
+})();
+</script>
+
 </body>
 </html>
