@@ -1176,7 +1176,7 @@ function wire(){
 }
 init();
 </script>
-<!-- PULSE SYNC (added) — pushes a daily activity summary to Pulse. Reads localStorage only; config is inline so no setup needed. -->
+<!-- PULSE SYNC (added) — pushes a daily activity + day-type summary to Pulse. Reads localStorage only. -->
 <script>
 (function () {
   var EMAIL = 'sumeet9surana@gmail.com';
@@ -1184,12 +1184,14 @@ init();
   var BASE  = 'https://prana-flame.vercel.app';
   function readJSON(k){ try{return JSON.parse(localStorage.getItem(k));}catch(e){return null;} }
   function buildDays(){
-    var hist = readJSON('rack_hist_v1') || {}, out = [];
+    var hist = readJSON('rack_hist_v1') || {};
+    var plan = readJSON('rack_todayplan_v1') || {};
+    var out = [];
     for (var d in hist){
       if(!/^\d{4}-\d{2}-\d{2}$/.test(d)) continue;
       var day = hist[d]||{}, sets = 0;
       for (var ex in day){ var v=day[ex]; if(typeof v==='number' && v>0) sets+=v; }
-      if(sets>0) out.push({date:d, sets:sets, sessions:1});
+      if(sets>0){ var dt = plan[d]; out.push({date:d, sets:sets, sessions:1, dayType:(dt && dt!=='rest')?dt:null}); }
     }
     out.sort(function(a,b){return a.date<b.date?1:-1;});
     return out.slice(0,70);
